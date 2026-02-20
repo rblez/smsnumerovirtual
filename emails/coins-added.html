@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coins Agregados - SMS Número Virtual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #FAFAFA;
+            color: #2E2E2E;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 16px;
+        }
+        .brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2E2E2E;
+        }
+        .content {
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 16px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2E2E2E;
+            text-align: center;
+        }
+        .success-badge {
+            display: inline-block;
+            background-color: #10B981;
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .coins-box {
+            background: linear-gradient(135deg, #E8E1D4 0%, #D4CCC0 100%);
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            margin: 24px 0;
+        }
+        .coins-label {
+            font-size: 14px;
+            color: #3E3E3E;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .coins-amount {
+            font-size: 48px;
+            font-weight: 700;
+            color: #2E2E2E;
+            margin-bottom: 8px;
+        }
+        .coins-package {
+            font-size: 16px;
+            color: #737373;
+        }
+        .text {
+            font-size: 16px;
+            color: #3E3E3E;
+            margin-bottom: 16px;
+        }
+        .details-box {
+            background-color: #F5F5F5;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+        .detail-row:last-child {
+            margin-bottom: 0;
+            padding-top: 12px;
+            border-top: 1px solid #E5E5E5;
+        }
+        .detail-label {
+            color: #737373;
+        }
+        .detail-value {
+            color: #2E2E2E;
+            font-weight: 500;
+        }
+        .detail-value.total {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #2E2E2E;
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 16px 0;
+        }
+        .button:hover {
+            background-color: #3E3E3E;
+        }
+        .divider {
+            border: none;
+            border-top: 1px solid #E5E5E5;
+            margin: 32px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .footer-text {
+            font-size: 14px;
+            color: #737373;
+            margin-bottom: 8px;
+        }
+        .footer-link {
+            color: #2E2E2E;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        @media (max-width: 480px) {
+            .content {
+                padding: 24px;
+            }
+            .title {
+                font-size: 24px;
+            }
+            .coins-amount {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://smsnumerovirtual.com/isotipo.png" alt="SMS Número Virtual" class="logo">
+            <div class="brand">SMS Número Virtual</div>
+        </div>
+
+        <div class="content">
+            <center>
+                <span class="success-badge">✓ Compra Exitosa</span>
+            </center>
+
+            <h1 class="title">¡Coins agregados a tu cuenta!</h1>
+            
+            <p class="text" style="text-align: center;">
+                Hola {{name}}, tu compra ha sido procesada exitosamente.
+            </p>
+
+            <div class="coins-box">
+                <div class="coins-label">Coins Agregados</div>
+                <div class="coins-amount">+{{coinsAmount}}</div>
+                <div class="coins-package">{{packageName}}</div>
+            </div>
+
+            <div class="details-box">
+                <div class="detail-row">
+                    <span class="detail-label">Método de pago</span>
+                    <span class="detail-value">{{paymentMethod}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Fecha</span>
+                    <span class="detail-value">{{purchaseDate}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">ID de transacción</span>
+                    <span class="detail-value">{{transactionId}}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Balance anterior</span>
+                    <span class="detail-value">{{previousBalance}} coins</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label total">Balance actual</span>
+                    <span class="detail-value total">{{newBalance}} coins</span>
+                </div>
+            </div>
+
+            <p class="text" style="text-align: center;">
+                Ya puedes usar tus coins para enviar SMS a cualquier número del mundo.
+            </p>
+
+            <center>
+                <a href="{{dashboardUrl}}" class="button">Enviar SMS Ahora</a>
+            </center>
+
+            <hr class="divider">
+
+            <p class="text" style="margin-bottom: 0; text-align: center;">
+                ¿Tienes alguna pregunta? Escríbenos a <a href="mailto:support@smsnumerovirtual.com" style="color: #2E2E2E;">support@smsnumerovirtual.com</a>
+            </p>
+        </div>
+
+        <div class="footer">
+            <p class="footer-text">© 2026 SMS Número Virtual. Todos los derechos reservados.</p>
+            <p class="footer-text">
+                <a href="https://smsnumerovirtual.com/privacy" class="footer-link">Política de privacidad</a> • 
+                <a href="https://smsnumerovirtual.com/terms" class="footer-link">Términos de servicio</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

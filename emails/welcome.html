@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido - SMS Número Virtual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #FAFAFA;
+            color: #2E2E2E;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 16px;
+        }
+        .brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2E2E2E;
+        }
+        .content {
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 16px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2E2E2E;
+        }
+        .text {
+            font-size: 16px;
+            color: #3E3E3E;
+            margin-bottom: 24px;
+        }
+        .highlight-box {
+            background-color: #E8E1D4;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+        .highlight-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2E2E2E;
+        }
+        .coins-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2E2E2E;
+        }
+        .button {
+            display: inline-block;
+            background-color: #2E2E2E;
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 16px 0;
+        }
+        .features {
+            margin: 24px 0;
+        }
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #E8E1D4;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .feature-icon::before {
+            content: "✓";
+            color: #2E2E2E;
+            font-weight: bold;
+        }
+        .feature-text {
+            font-size: 15px;
+            color: #3E3E3E;
+        }
+        .divider {
+            border: none;
+            border-top: 1px solid #E5E5E5;
+            margin: 32px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .footer-text {
+            font-size: 14px;
+            color: #737373;
+            margin-bottom: 8px;
+        }
+        .footer-link {
+            color: #2E2E2E;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        @media (max-width: 480px) {
+            .content {
+                padding: 24px;
+            }
+            .title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://smsnumerovirtual.com/isotipo.png" alt="SMS Número Virtual" class="logo">
+            <div class="brand">SMS Número Virtual</div>
+        </div>
+
+        <div class="content">
+            <h1 class="title">¡Bienvenido, {{name}}!</h1>
+            
+            <p class="text">
+                Gracias por unirte a SMS Número Virtual. Tu cuenta ha sido creada exitosamente.
+            </p>
+
+            <div class="highlight-box">
+                <div class="highlight-title">Tu ID de usuario</div>
+                <div style="font-size: 20px; font-weight: 600; color: #2E2E2E; letter-spacing: 1px;">{{customId}}</div>
+                <p style="font-size: 14px; color: #737373; margin-top: 8px;">
+                    Usa este ID para acceder a tu dashboard: <a href="{{dashboardUrl}}" style="color: #2E2E2E; text-decoration: underline;">{{dashboardUrl}}</a>
+                </p>
+            </div>
+
+            <p class="text">
+                Con tu cuenta puedes:
+            </p>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon"></div>
+                    <div class="feature-text">Enviar SMS a números de todo el mundo</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"></div>
+                    <div class="feature-text">Ver historial de mensajes enviados</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"></div>
+                    <div class="feature-text">Recargar coins fácilmente</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"></div>
+                    <div class="feature-text">Tarifas competitivas por país</div>
+                </div>
+            </div>
+
+            <center>
+                <a href="{{dashboardUrl}}" class="button">Ir a mi Dashboard</a>
+            </center>
+
+            <hr class="divider">
+
+            <p class="text" style="margin-bottom: 0;">
+                ¿Necesitas ayuda? Escríbenos a <a href="mailto:support@smsnumerovirtual.com" style="color: #2E2E2E;">support@smsnumerovirtual.com</a> o contáctanos por Telegram.
+            </p>
+        </div>
+
+        <div class="footer">
+            <p class="footer-text">© 2026 SMS Número Virtual. Todos los derechos reservados.</p>
+            <p class="footer-text">
+                <a href="https://smsnumerovirtual.com/privacy" class="footer-link">Política de privacidad</a> • 
+                <a href="https://smsnumerovirtual.com/terms" class="footer-link">Términos de servicio</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
