@@ -25,12 +25,7 @@ export default function Layout({ children, showSidebar = true }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<{ email?: string; full_name?: string } | null>(null);
   const [profile, setProfile] = useState<{ credits_balance?: number } | null>(null);
-  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
-
-  useEffect(() => {
-    checkSession();
-  }, []);
 
   const checkSession = async () => {
     try {
@@ -50,10 +45,18 @@ export default function Layout({ children, showSidebar = true }: LayoutProps) {
       }
     } catch (error) {
       console.error("Error checking session:", error);
-    } finally {
-      setLoading(false);
     }
+    // finally {
+    //   setLoading(false);
+    // }
   };
+
+  useEffect(() => {
+    const init = async () => {
+      await checkSession();
+    };
+    init();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();

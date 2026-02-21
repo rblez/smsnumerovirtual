@@ -46,7 +46,7 @@ export default function Header() {
 
   const navLinks = [
     { href: "#features", label: "Características" },
-    { href: "#how-it-works", label: "Cómo funciona" },
+    { href: "#how-it-works", label: "Guia" },
   ];
 
   return (
@@ -58,9 +58,9 @@ export default function Header() {
             <Image
               src="/isotipo.png"
               alt="SMS Número Virtual"
-              width={40}
-              height={40}
-              className="h-10 w-auto"
+              width={20}
+              height={20}
+              className="h-5 w-auto"
             />
             <span className="text-xl font-bold text-[#2E2E2E] hidden sm:block">
               SMS Número Virtual

@@ -34,7 +34,7 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="como-funciona" className="py-20 bg-[#E8E1D4]/20">
+    <section id="como-funciona" className="py-20 bg-[var(--color-secondary)]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-[#2E2E2E] mb-4">
@@ -50,13 +50,13 @@ export default function HowItWorks() {
             <div key={index} className="relative">
               {/* Connector line (hidden on mobile and last item) */}
               {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-12 left-full w-full h-0.5 bg-[#E8E1D4]" />
+                <div className="hidden lg:block absolute top-12 left-full w-full h-0.5 bg-[var(--color-secondary)]" />
               )}
               
               <div className="text-center">
                 {/* Step number and icon */}
                 <div className="relative inline-flex items-center justify-center mb-6">
-                  <div className="w-24 h-24 rounded-2xl bg-white border-2 border-[#E8E1D4] flex items-center justify-center shadow-sm">
+                  <div className="w-24 h-24 rounded-2xl bg-white border-2 border-[var(--color-secondary)] flex items-center justify-center shadow-sm">
                     <item.icon className="w-10 h-10 text-[#2E2E2E]" />
                   </div>
                   <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-[#2E2E2E] text-white flex items-center justify-center text-sm font-bold">

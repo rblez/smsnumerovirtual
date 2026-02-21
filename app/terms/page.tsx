@@ -9,58 +9,58 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-[#FAFAFA]">
-      <div className="max-w-3xl mx-auto px-6 py-16">
-        <Link href="/" className="text-sm text-[#737373] hover:text-[#2E2E2E] mb-8 inline-block">
+      <div className="max-w-3xl mx-auto px-6 md:px-12 py-16 md:py-24">
+        <Link href="/" className="font-mono text-xs tracking-wider uppercase text-[#737373] hover:text-[#2E2E2E] mb-12 inline-block">
           ← Volver al inicio
         </Link>
         
-        <h1 className="text-3xl font-bold text-[#2E2E2E] mb-8">Términos de Servicio</h1>
+        <h1 className="font-display text-4xl md:text-5xl font-normal text-[#2E2E2E] tracking-[-0.02em] leading-[1.1] mb-12">Términos de Servicio</h1>
         
-        <div className="prose prose-sm text-[#737373] space-y-6">
+        <div className="space-y-10">
           <section>
-            <h2 className="text-lg font-semibold text-[#2E2E2E] mb-3">1. Aceptación de los Términos</h2>
-            <p>
+            <h2 className="font-display text-xl text-[#2E2E2E] tracking-[-0.01em] mb-4">1. Aceptación de los Términos</h2>
+            <p className="font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em]">
               Al acceder y utilizar SMS Número Virtual, aceptas estar sujeto a estos términos y condiciones. 
               Si no estás de acuerdo con alguna parte de estos términos, no podrás utilizar nuestro servicio.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#2E2E2E] mb-3">2. Descripción del Servicio</h2>
-            <p>
+            <h2 className="font-display text-xl text-[#2E2E2E] tracking-[-0.01em] mb-4">2. Descripción del Servicio</h2>
+            <p className="font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em] mb-4">
               SMS Número Virtual es una plataforma de envío de SMS internacionales. Nuestro servicio permite:
             </p>
-            <ul className="list-disc pl-5 mt-2 space-y-1">
+            <ul className="list-disc pl-6 space-y-2 font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em]">
               <li>Enviar SMS a números de teléfono en más de 200 países</li>
               <li>Comprar coins para utilizar como crédito de envío</li>
               <li>Consultar historial de mensajes enviados</li>
             </ul>
-            <p className="mt-3">
-              <strong>Importante:</strong> Este servicio es exclusivamente para envío de SMS salientes. 
+            <p className="font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em] mt-4">
+              <strong className="text-[#2E2E2E]">Importante:</strong> Este servicio es exclusivamente para envío de SMS salientes. 
               No proporcionamos números virtuales ni podemos recibir respuestas.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#2E2E2E] mb-3">3. Sistema de Coins</h2>
-            <p>
+            <h2 className="font-display text-xl text-[#2E2E2E] tracking-[-0.01em] mb-4">3. Sistema de Coins</h2>
+            <p className="font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em] mb-4">
               Los coins son la moneda virtual de nuestra plataforma. Cada SMS consume una cantidad de coins 
               según el país de destino:
             </p>
-            <ul className="list-disc pl-5 mt-2 space-y-1">
+            <ul className="list-disc pl-6 space-y-2 font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em]">
               <li>Cuba, USA, Canadá: 1 coin por SMS</li>
               <li>México, España, y otros países seleccionados: 2 coins por SMS</li>
               <li>Resto del mundo: 3 coins por SMS</li>
             </ul>
-            <p className="mt-3">
+            <p className="font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em] mt-4">
               Los coins no tienen fecha de vencimiento y no son reembolsables.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#2E2E2E] mb-3">4. Prohibiciones</h2>
-            <p>Está estrictamente prohibido utilizar el servicio para:</p>
-            <ul className="list-disc pl-5 mt-2 space-y-1">
+            <h2 className="font-display text-xl text-[#2E2E2E] tracking-[-0.01em] mb-4">4. Prohibiciones</h2>
+            <p className="font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em] mb-4">Está estrictamente prohibido utilizar el servicio para:</p>
+            <ul className="list-disc pl-6 space-y-2 font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em]">
               <li>Enviar spam o mensajes no solicitados</li>
               <li>Cometer fraude o estafa</li>
               <li>Enviar contenido ilegal, amenazante o abusivo</li>
@@ -70,8 +70,8 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#2E2E2E] mb-3">5. Limitaciones de Responsabilidad</h2>
-            <p>
+            <h2 className="font-display text-xl text-[#2E2E2E] tracking-[-0.01em] mb-4">5. Limitaciones de Responsabilidad</h2>
+            <p className="font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em]">
               No garantizamos la entrega de todos los SMS enviados. Factores como la red del destinatario, 
               bloqueos de operadoras o números inválidos pueden impedir la entrega. No nos hacemos responsables 
               por mensajes no entregados debido a estos factores externos.
@@ -79,28 +79,31 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#2E2E2E] mb-3">6. Modificaciones</h2>
-            <p>
+            <h2 className="font-display text-xl text-[#2E2E2E] tracking-[-0.01em] mb-4">6. Modificaciones</h2>
+            <p className="font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em]">
               Nos reservamos el derecho de modificar estos términos en cualquier momento. 
               Los cambios entrarán en vigor inmediatamente después de su publicación.
             </p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold text-[#2E2E2E] mb-3">7. Contacto</h2>
-            <p>
+            <h2 className="font-display text-xl text-[#2E2E2E] tracking-[-0.01em] mb-4">7. Contacto</h2>
+            <p className="font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em]">
               Para cualquier consulta sobre estos términos, contáctanos por Telegram:{' '}
-              <a href="https://t.me/pedrobardaji" target="_blank" rel="noopener noreferrer" className="text-[#2E2E2E] underline">
+              <a href="https://t.me/pedrobardaji" target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-wider uppercase text-[#2E2E2E] underline">
                 @pedrobardaji
               </a>
             </p>
           </section>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-[#E5E5E5] text-sm text-[#737373]">
-          <p>Última actualización: Febrero 2026</p>
+        <div className="mt-16 pt-8 border-t border-[#E5E5E5] text-center">
+          <p className="font-mono text-[10px] tracking-wider uppercase text-[#A0A0A0]">
+            © 2025 SMS Número Virtual. Todos los derechos reservados.
+          </p>
         </div>
       </div>
     </div>
+
   );
 }

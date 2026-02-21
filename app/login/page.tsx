@@ -4,7 +4,8 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { Mail, Lock, Eye, EyeOff, CheckCircle, ArrowLeft } from "lucide-react";
+import { SFIcon } from '@bradleyhodges/sfsymbols-react'
+import { sfEnvelope, sfLock, sfEye, sfEyeSlash, sfCheckmarkCircle, sfChevronLeft } from '@bradleyhodges/sfsymbols'
 import Image from "next/image";
 
 function LoginContent() {
@@ -61,7 +62,7 @@ function LoginContent() {
     }
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -70,20 +71,10 @@ function LoginContent() {
 
       await new Promise(resolve => setTimeout(resolve, 500));
       
-      // Fetch custom_id from profile
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("custom_id")
-        .eq("id", data.user?.id)
-        .single();
-      
-      const customId = profile?.custom_id || data.user?.id;
       const redirectParam = searchParams.get("redirect");
       
-      if (redirectParam && redirectParam !== "/dashboard") {
+      if (redirectParam) {
         window.location.replace(redirectParam);
-      } else if (customId) {
-        window.location.replace(`/~/${customId}`);
       } else {
         window.location.replace("/");
       }
@@ -104,7 +95,7 @@ function LoginContent() {
             height={40}
             className="h-10 w-auto"
           />
-          <span className="font-[family-name:var(--font-mona-sans)] text-xl font-bold text-[#2E2E2E]">
+          <span className="text-xl font-bold text-[#2E2E2E]">
             SMS Número Virtual
           </span>
         </Link>
@@ -115,7 +106,7 @@ function LoginContent() {
         <div className="mt-8 p-6 sm:p-7">
         {justRegistered && (
           <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 text-sm flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 shrink-0" />
+            <SFIcon icon={sfCheckmarkCircle} size={20} color="currentColor" />
             <span className="font-medium">¡Cuenta creada! Ahora puedes iniciar sesión</span>
           </div>
         )}
@@ -135,7 +126,7 @@ function LoginContent() {
               Correo electrónico
             </label>
             <div className="relative">
-              <Mail className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${emailFocused ? 'text-[#2E2E2E]' : 'text-[#737373]'}`} />
+              <SFIcon icon={sfEnvelope} size={20} color={emailFocused ? '#2E2E2E' : '#737373'} className="absolute left-3 top-1/2 -translate-y-1/2 transition-colors" />
               <input
                 id="email"
                 name="email"
@@ -169,7 +160,7 @@ function LoginContent() {
               Contraseña
             </label>
             <div className="relative">
-              <Lock className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors ${passwordFocused ? 'text-[#2E2E2E]' : 'text-[#737373]'}`} />
+              <SFIcon icon={sfLock} size={20} color={passwordFocused ? '#2E2E2E' : '#737373'} className="absolute left-3 top-1/2 -translate-y-1/2 transition-colors" />
               <input
                 id="password"
                 name="password"
@@ -193,11 +184,7 @@ function LoginContent() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373] hover:text-[#2E2E2E] transition-colors z-10"
               >
-                {showPassword ? (
-                  <EyeOff className="w-5 h-5" />
-                ) : (
-                  <Eye className="w-5 h-5" />
-                )}
+                <SFIcon icon={showPassword ? sfEyeSlash : sfEye} size={20} color="currentColor" />
               </button>
             </div>
             {passwordError && (
@@ -260,7 +247,7 @@ function LoginContent() {
             href="/"
             className="inline-flex items-center gap-2 text-sm text-[#737373] hover:text-[#2E2E2E] transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <SFIcon icon={sfChevronLeft} size={16} color="currentColor" />
             Volver al inicio
           </Link>
         </div>
@@ -272,12 +259,82 @@ function LoginContent() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
-        <div className="text-[#2E2E2E] text-lg font-medium">Cargando...</div>
-      </div>
-    }>
-      <LoginContent />
-    </Suspense>
+    <div className="min-h-screen bg-linear-to-b from-[#FAFAFA] to-[#E8E1D4]/30">
+      <Suspense fallback={
+        <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center px-4">
+          <div className="w-full max-w-md">
+            {/* Logo skeleton */}
+            <div className="flex justify-center mb-8">
+              <div className="h-12 w-48 bg-[#E8E1D4] rounded" />
+            </div>
+
+            {/* Form skeleton */}
+            <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+              {/* Email field skeleton */}
+              <div className="space-y-2">
+                <div className="h-4 bg-[#E8E1D4] rounded w-16" />
+                <div className="h-12 bg-[#E8E1D4] rounded-xl" />
+              </div>
+
+              {/* Password field skeleton */}
+              <div className="space-y-2">
+                <div className="h-4 bg-[#E8E1D4] rounded w-20" />
+                <div className="h-12 bg-[#E8E1D4] rounded-xl" />
+              </div>
+
+              {/* Remember me skeleton */}
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 bg-[#E8E1D4] rounded" />
+                <div className="h-4 bg-[#E8E1D4] rounded w-24" />
+              </div>
+
+              {/* Forgot password skeleton */}
+              <div className="h-4 bg-[#E8E1D4] rounded w-40" />
+
+              {/* Submit button skeleton */}
+              <div className="h-12 bg-[#E8E1D4] rounded-xl" />
+
+              {/* Register link skeleton */}
+              <div className="text-center space-y-2">
+                <div className="h-4 bg-[#E8E1D4] rounded w-64 mx-auto" />
+                <div className="h-4 bg-[#E8E1D4] rounded w-32 mx-auto" />
+              </div>
+
+              {/* Back link skeleton */}
+              <div className="text-center">
+                <div className="h-4 bg-[#E8E1D4] rounded w-28 mx-auto" />
+              </div>
+            </div>
+          </div>
+        </div>
+      }>
+        <LoginContent />
+      </Suspense>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-100 pt-8 pb-6 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-500 text-sm text-center md:text-left">
+              © 2026 SMS Número Virtual. Todos los derechos reservados.
+            </p>
+            <div className="flex items-center gap-6">
+              <Link href="/terms" className="text-gray-500 hover:text-gray-900 transition-colors text-sm">
+                Términos de Servicio
+              </Link>
+              <Link href="/privacy" className="text-gray-500 hover:text-gray-900 transition-colors text-sm">
+                Políticas de Privacidad
+              </Link>
+              <span className="text-gray-300">|</span>
+              <a href="https://t.me/smsnumerovirtual" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-500 transition-colors">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }

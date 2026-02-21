@@ -82,7 +82,7 @@ function ResetPasswordContent() {
               height={40}
               className="h-10 w-auto"
             />
-            <span className="font-[family-name:var(--font-mona-sans)] text-xl font-bold text-[#2E2E2E]">
+            <span className="text-xl font-bold text-[#2E2E2E]">
               SMS Número Virtual
             </span>
           </Link>
@@ -112,7 +112,7 @@ function ResetPasswordContent() {
             height={40}
             className="h-10 w-auto"
           />
-          <span className="font-[family-name:var(--font-mona-sans)] text-xl font-bold text-[#2E2E2E]">
+          <span className="text-xl font-bold text-[#2E2E2E]">
             SMS Número Virtual
           </span>
         </Link>
@@ -239,8 +239,39 @@ function ResetPasswordContent() {
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
-        <div className="text-[#2E2E2E] text-lg font-medium">Cargando...</div>
+      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center px-4">
+        <div className="w-full max-w-md">
+          {/* Logo skeleton */}
+          <div className="flex justify-center mb-8">
+            <div className="h-12 w-48 bg-[#E8E1D4] rounded" />
+          </div>
+
+          {/* Form skeleton */}
+          <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+            {/* Title skeleton */}
+            <div className="h-8 bg-[#E8E1D4] rounded w-56 mx-auto mb-6" />
+
+            {/* Password field skeleton */}
+            <div className="space-y-2">
+              <div className="h-4 bg-[#E8E1D4] rounded w-24" />
+              <div className="h-12 bg-[#E8E1D4] rounded-xl" />
+            </div>
+
+            {/* Confirm password field skeleton */}
+            <div className="space-y-2">
+              <div className="h-4 bg-[#E8E1D4] rounded w-32" />
+              <div className="h-12 bg-[#E8E1D4] rounded-xl" />
+            </div>
+
+            {/* Submit button skeleton */}
+            <div className="h-12 bg-[#E8E1D4] rounded-xl" />
+
+            {/* Back link skeleton */}
+            <div className="text-center">
+              <div className="h-4 bg-[#E8E1D4] rounded w-40 mx-auto" />
+            </div>
+          </div>
+        </div>
       </div>
     }>
       <ResetPasswordContent />

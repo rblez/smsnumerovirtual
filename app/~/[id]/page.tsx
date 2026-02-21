@@ -1,22 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
-import {
-  History,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-  ChevronRight,
-  User,
-  Coins,
-  CheckCircle,
-  AlertCircle,
-  Send,
-} from "lucide-react";
+import { SFIcon } from '@bradleyhodges/sfsymbols-react'
+import { Coins } from "lucide-react";
+import { 
+  sfClockCircle,
+  sfGear,
+  sfPerson,
+  sfDollarsignCircle,
+  sfCheckmarkCircle,
+  sfExclamationmarkCircle,
+  sfBubbleLeft,
+  sfChevronDown,
+} from '@bradleyhodges/sfsymbols'
 
 interface Profile {
   id: string;
@@ -31,7 +32,6 @@ interface SMSHistory {
   message: string;
   cost: number;
   status: string;
-  delivery_status: string | null;
   created_at: string;
 }
 
@@ -281,7 +281,6 @@ export default function DashboardPage() {
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [activeTab, setActiveTab] = useState<"home" | "history" | "settings">("home");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // SMS State
@@ -299,11 +298,7 @@ export default function DashboardPage() {
   const messageLength = message.length;
   const smsCount = Math.ceil(messageLength / maxChars) || 1;
 
-  useEffect(() => {
-    fetchProfile();
-  }, [userId]);
-
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -359,7 +354,11 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, router]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   const fetchHistory = async (uid: string) => {
     try {
@@ -373,15 +372,6 @@ export default function DashboardPage() {
       if (data) setHistory(data);
     } catch (error) {
       console.error("Error fetching history:", error);
-    }
-  };
-
-  // Handle tab change - refresh history when switching to history tab
-  const handleTabChange = (tab: "home" | "history" | "settings") => {
-    setActiveTab(tab);
-    setSidebarOpen(false);
-    if (tab === "history" && actualUserId) {
-      fetchHistory(actualUserId);
     }
   };
 
@@ -445,337 +435,365 @@ export default function DashboardPage() {
     return 3;
   };
 
+  const getPhonePlaceholder = (countryCode: string): string => {
+    const formats: { [key: string]: string } = {
+      // 8 dígitos
+      "cu": "0000 0000",
+      "uy": "0000 0000",
+      "bo": "0000 0000",
+      "pa": "0000 0000",
+      "cr": "0000 0000",
+      "gt": "0000 0000",
+      "hn": "0000 0000",
+      "sv": "0000 0000",
+      "ni": "0000 0000",
+      "ht": "0000 0000",
+      // 9 dígitos
+      "es": "000 000 000",
+      "fr": "0 00 00 00 00",
+      "pe": "000 000 000",
+      "ec": "000 000 000",
+      "py": "000 000 000",
+      "cl": "0000 0000",
+      "pt": "000 000 000",
+      "nl": "0 000 000 00",
+      "be": "000 00 00 00",
+      "ch": "000 000 000",
+      "at": "0000 000 000",
+      "se": "000-000 000",
+      "no": "000 00 000",
+      "dk": "00 00 00 00",
+      "fi": "00 000 000",
+      "ie": "000 000 000",
+      "pl": "000 000 000",
+      "cz": "000 000 000",
+      "hu": "00 000 000",
+      "ro": "000 000 000",
+      "bg": "000 000 000",
+      "hr": "00 000 000",
+      "si": "00 000 000",
+      "sk": "000 000 000",
+      "lt": "000 00000",
+      "lv": "00 000 000",
+      "ee": "000 0000",
+      "ve": "0000 0000",
+      "gf": "000 00 00 00",
+      // 10 dígitos
+      "us": "000-000-0000",
+      "ca": "000-000-0000",
+      "mx": "000 000 0000",
+      "co": "000 000 0000",
+      "do": "000-000-0000",
+      "pr": "000-000-0000",
+      "jm": "000-000-0000",
+      "bs": "000-000-0000",
+      "bb": "000-000-0000",
+      "tt": "000-0000",
+      "br": "00000-0000",
+      // 11 dígitos
+      "gb": "0000 000 000",
+      "de": "0000 000 000",
+      "it": "000 0000 000",
+      // 7 dígitos
+      "gy": "000 0000",
+      "sr": "000 000"
+    };
+    return formats[countryCode] || "000 000 000";
+  };
+
   const estimatedCost = getCoinsCost(selectedCountry.dialCode) * smsCount;
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#E8E1D4] flex items-center justify-center">
-        <div className="text-[#2E2E2E] text-lg font-medium">Cargando...</div>
+      <div className="min-h-screen bg-linear-to-b from-[#FAFAFA] to-[#E8E1D4]/30 px-4 py-10 lg:px-6">
+        <div className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-md flex-col justify-center items-center">
+          <motion.div
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <Image src="/isotipo.png" alt="SMS Número Virtual" width={64} height={64} className="h-16 w-auto" />
+          </motion.div>
+          <p className="mt-4 text-lg font-medium text-[#2E2E2E]">Cargando...</p>
+        </div>
       </div>
     );
   }
 
   const menuItems = [
-    { id: "home", label: "Enviar SMS", icon: Send },
-    { id: "history", label: "Historial", icon: History },
-    { id: "settings", label: "Configuración", icon: Settings },
+    { id: "home", label: "Enviar SMS", icon: sfBubbleLeft },
+    { id: "history", label: "Historial", icon: sfClockCircle },
+    { id: "settings", label: "Configuración", icon: sfGear },
   ];
 
   return (
-    <div className="min-h-screen bg-[#E8E1D4] flex">
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-[#2E2E2E] text-white transform transition-transform duration-300 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        }`}
-      >
-        <div className="p-6">
-          <Link href="/" className="flex items-center gap-2 mb-8">
-            <span className="font-[family-name:var(--font-mona-sans)] text-lg font-bold">
-              SMS Número Virtual
-            </span>
-          </Link>
-
-          {/* User Info */}
-          <div className="mb-6 p-4 bg-white/10 rounded-xl">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-full bg-[#E8E1D4] flex items-center justify-center">
-                <User className="w-5 h-5 text-[#2E2E2E]" />
-              </div>
-              <div className="overflow-hidden">
-                <p className="font-medium text-sm truncate">{profile?.full_name || "Usuario"}</p>
-                <p className="text-xs text-gray-400 truncate">{profile?.email}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-sm">
-              <Coins className="w-4 h-4 text-[#E8E1D4]" />
-              <span className="font-semibold">{profile?.credits_balance || 0} coins</span>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <nav className="space-y-2">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleTabChange(item.id as "home" | "history" | "settings")}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-left ${
-                    activeTab === item.id
-                      ? "bg-[#E8E1D4] text-[#2E2E2E]"
-                      : "hover:bg-white/10"
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
-                </button>
-              );
-            })}
-          </nav>
-
-          {/* Logout */}
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 mt-6 text-red-400 hover:bg-red-500/10 rounded-xl transition-colors"
-          >
-            <LogOut className="w-5 h-5" />
-            <span className="font-medium">Cerrar sesión</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 min-w-0">
-        {/* Mobile Header */}
-        <header className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-2 hover:bg-gray-100 rounded-lg"
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-          <span className="font-[family-name:var(--font-mona-sans)] font-bold">
+    <div className="min-h-screen bg-linear-to-b from-[#FAFAFA] to-[#E8E1D4]/30 px-4 py-10 lg:px-6">
+      <div className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-md flex-col justify-center">
+        <Link href="/" className="flex items-center justify-center gap-3 mb-6">
+          <Image
+            src="/isotipo.png"
+            alt="SMS Número Virtual"
+            width={40}
+            height={40}
+            className="h-10 w-auto"
+          />
+          <span className="text-xl font-bold text-[#2E2E2E]">
             SMS Número Virtual
           </span>
-          <div className="w-10" />
-        </header>
+        </Link>
 
-        <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto">
-          {/* HOME - Send SMS */}
-          {activeTab === "home" && (
-            <div className="max-w-lg mx-auto">
-              <div className="bg-[#FAFAFA] p-6">
-                {smsResult && (
-                  <div
-                    className={`mb-6 p-4 flex items-center gap-3 ${
-                      smsResult.success
-                        ? "bg-emerald-100 text-emerald-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {smsResult.success ? (
-                      <CheckCircle className="w-5 h-5" />
-                    ) : (
-                      <AlertCircle className="w-5 h-5" />
-                    )}
-                    <span className="font-medium text-sm">{smsResult.message}</span>
+        {/* User Info Bar */}
+        <div className="mb-6 p-4 bg-white rounded-xl border border-[#E5E5E5]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#2E2E2E] flex items-center justify-center">
+                <SFIcon icon={sfPerson} size={20} color="white" />
+              </div>
+              <div>
+                <p className="font-medium text-[#2E2E2E] text-sm">{profile?.full_name || "Usuario"}</p>
+                <p className="text-xs text-[#737373]">{profile?.email}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <SFIcon icon={sfDollarsignCircle} size={16} color="#2E2E2E" />
+              <span className="font-bold text-[#2E2E2E] text-sm">{profile?.credits_balance || 0}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className="mb-6 flex bg-white rounded-xl border border-[#E5E5E5] p-1">
+          {menuItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id as "home" | "history" | "settings")}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-sm font-medium transition-colors ${
+                activeTab === item.id
+                  ? "bg-[#2E2E2E] text-white"
+                  : "text-[#737373] hover:text-[#2E2E2E]"
+              }`}
+            >
+              <SFIcon icon={item.icon} size={16} color={activeTab === item.id ? "white" : "currentColor"} />
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {/* HOME - Send SMS */}
+        {activeTab === "home" && (
+            <div>
+              {smsResult && (
+                <div
+                  className={`mb-6 p-4 flex items-center gap-3 rounded-xl ${
+                    smsResult.success
+                      ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                      : "bg-red-50 text-red-800 border border-red-200"
+                  }`}
+                >
+                  <SFIcon icon={smsResult.success ? sfCheckmarkCircle : sfExclamationmarkCircle} size={20} color="currentColor" />
+                  <span className="font-medium text-sm">{smsResult.message}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleSendSMS} className="space-y-6">
+                {/* Country & Phone - Integrated */}
+                <div>
+                  <label className="block text-sm font-medium text-[#2E2E2E] mb-2">
+                    Número de teléfono
+                  </label>
+                  <div className="flex h-12 border border-[#E5E5E5] bg-white rounded-xl">
+                    {/* Country Selector */}
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                        className="flex items-center gap-2 h-full px-4 bg-[#E8E1D4] border-r border-[#E5E5E5] hover:bg-[#d4ccc0] transition-colors rounded-l-xl"
+                      >
+                        <span className={`fi fi-${selectedCountry.code} w-7 h-5`}></span>
+                        <SFIcon icon={sfChevronDown} size={16} color="#2E2E2E" />
+                      </button>
+
+                      {showCountryDropdown && (
+                        <div className="absolute top-full left-0 mt-1 w-80 max-h-96 overflow-y-auto bg-white border border-[#E5E5E5] shadow-xl z-[100] rounded-xl">
+                          {countries.map((country) => (
+                            <button
+                              key={country.code}
+                              type="button"
+                              onClick={() => {
+                                setSelectedCountry(country);
+                                setShowCountryDropdown(false);
+                                setPhoneNumber("");
+                              }}
+                              className="flex items-center gap-3 w-full px-4 py-3 hover:bg-[#E8E1D4] transition-colors text-left"
+                            >
+                              <span className={`fi fi-${country.code} w-6 h-4 shrink-0`}></span>
+                              <span className="text-sm font-medium text-[#2E2E2E] truncate">{country.name}</span>
+                              <span className="text-sm text-[#737373] ml-auto shrink-0">{country.dialCode}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Phone Input with fixed country code */}
+                    <div className="relative flex-1 flex items-center border-l border-[#E5E5E5]">
+                      <span className="text-base font-medium text-[#737373] pl-4 pr-2 select-none whitespace-nowrap">
+                        {selectedCountry.dialCode}
+                      </span>
+                      <input
+                        type="tel"
+                        value={phoneNumber}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^\d]/g, "");
+                          setPhoneNumber(value);
+                        }}
+                        className="flex-1 h-full bg-transparent border-0 focus:outline-none focus:bg-[#FAFAFA]/50 transition-all text-base rounded-r-xl placeholder:text-[#A0A0A0]"
+                        placeholder={getPhonePlaceholder(selectedCountry.code)}
+                        required
+                      />
+                    </div>
                   </div>
-                )}
+                  <p className="text-sm text-[#737373] mt-2">País: {selectedCountry.name}</p>
+                </div>
 
-                <form onSubmit={handleSendSMS} className="space-y-6">
-                  {/* Country & Phone - Integrated */}
-                  <div>
-                    <label className="block text-base font-medium text-[#2E2E2E] mb-3">
-                      Número de teléfono
-                    </label>
-                    <div className="flex h-14 border border-[#2E2E2E] bg-white">
-                      {/* Country Selector */}
-                      <div className="relative">
-                        <button
-                          type="button"
-                          onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-                          className="flex items-center gap-2 h-full px-4 bg-[#E8E1D4] border-r border-[#2E2E2E] hover:bg-[#d4ccc0] transition-colors"
-                        >
-                          <span className={`fi fi-${selectedCountry.code} w-7 h-5 shadow-sm`}></span>
-                          <ChevronRight className="w-5 h-5 text-[#2E2E2E] rotate-90" />
-                        </button>
+                {/* Message */}
+                <div>
+                  <label className="block text-sm font-medium text-[#2E2E2E] mb-2">
+                    Mensaje
+                  </label>
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="w-full px-5 py-4 bg-white border border-[#E5E5E5] focus:outline-none focus:bg-[#FAFAFA] transition-all resize-none text-base rounded-xl"
+                    placeholder="Escribe tu mensaje aquí..."
+                    rows={4}
+                    maxLength={maxChars * 3}
+                    required
+                  />
+                  <div className="flex justify-between text-sm text-[#737373] mt-2">
+                    <span>{messageLength}/{maxChars * 3} caracteres</span>
+                    <span className="flex items-center gap-1">
+                      {smsCount} SMS • {estimatedCost}
+                      <SFIcon icon={sfDollarsignCircle} size={14} color="#737373" />
+                    </span>
+                  </div>
+                </div>
 
-                        {showCountryDropdown && (
-                          <div className="absolute top-full left-0 mt-1 w-80 max-h-96 overflow-y-auto bg-[#FAFAFA] border border-[#2E2E2E] shadow-lg z-50">
-                            {countries.map((country) => (
-                              <button
-                                key={country.code}
-                                type="button"
-                                onClick={() => {
-                                  setSelectedCountry(country);
-                                  setShowCountryDropdown(false);
-                                  setPhoneNumber("");
-                                }}
-                                className="flex items-center gap-3 w-full px-4 py-3 hover:bg-[#E8E1D4] transition-colors text-left"
-                              >
-                                <span className={`fi fi-${country.code} w-6 h-4 shadow-sm shrink-0`}></span>
-                                <span className="text-base font-medium text-[#2E2E2E] truncate">{country.name}</span>
-                                <span className="text-base text-[#737373] ml-auto shrink-0">{country.dialCode}</span>
-                              </button>
-                            ))}
-                          </div>
-                        )}
+                {/* Submit */}
+                <button
+                  type="submit"
+                  disabled={sending || !phoneNumber || !message}
+                  className="w-full bg-[#2E2E2E] text-white py-3.5 text-base font-semibold hover:bg-[#3E3E3E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded-xl"
+                >
+                  {sending ? "Enviando..." : "Enviar"}
+                </button>
+              </form>
+            </div>
+          )}
+
+        {/* HISTORY */}
+        {activeTab === "history" && (
+          <div>
+            <div className="mb-8">
+              <h1 className="font-display text-2xl md:text-3xl font-normal text-[#2E2E2E] tracking-[-0.02em] mb-2">Historial de SMS</h1>
+              <p className="font-sans text-base text-[#737373] tracking-[-0.01em]">Revisa todos tus mensajes enviados</p>
+            </div>
+
+            {history.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl border border-[#E5E5E5]">
+                <SFIcon icon={sfClockCircle} size={48} color="#9CA3AF" className="mx-auto mb-4" />
+                <p className="font-sans text-[#737373] font-medium tracking-[-0.01em]">No has enviado SMS aún</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {history.map((sms) => (
+                  <div key={sms.id} className="bg-white border border-[#E5E5E5] rounded-xl p-4 hover:bg-[#FAFAFA] transition-colors">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <p className="font-medium text-[#2E2E2E] text-sm">{sms.phone_number}</p>
+                        <p className="text-sm text-[#737373] mt-1 line-clamp-2">{sms.message}</p>
+                        <p className="text-xs text-gray-400 mt-2">
+                          {new Date(sms.created_at).toLocaleDateString("es-ES", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
                       </div>
-
-                      {/* Phone Input */}
-                      <div className="relative flex-1">
-                        <input
-                          type="tel"
-                          value={phoneNumber}
-                          onChange={(e) => {
-                            const value = e.target.value.replace(/[^\d]/g, "");
-                            setPhoneNumber(value);
-                          }}
-                          className="w-full h-full px-5 pl-16 bg-transparent border-0 focus:outline-none focus:bg-[#FAFAFA]/50 transition-all text-base"
-                          placeholder="Ej: 12345678"
-                          required
-                        />
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base font-semibold text-[#737373]">
-                          {selectedCountry.dialCode}
+                      <div className="text-right ml-4">
+                        <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">
+                          <Coins className="w-3 h-3" />
+                          {sms.cost}
                         </span>
                       </div>
                     </div>
-                    <p className="text-sm text-[#737373] mt-2">País: {selectedCountry.name}</p>
                   </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
-                  {/* Message */}
+        {/* SETTINGS */}
+        {activeTab === "settings" && (
+          <div>
+            <div className="mb-6">
+              <h1 className="text-xl font-bold text-[#2E2E2E]">Configuración</h1>
+              <p className="text-sm text-[#737373]">Gestiona tu cuenta y preferencias</p>
+            </div>
+
+            <div className="space-y-6">
+              {/* Profile Info */}
+              <div className="bg-white border border-[#E5E5E5] rounded-xl p-6">
+                <h3 className="font-semibold text-[#2E2E2E] mb-4">Información de perfil</h3>
+                <div className="space-y-3">
                   <div>
-                    <label className="block text-base font-medium text-[#2E2E2E] mb-3">
-                      Mensaje
-                    </label>
-                    <textarea
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      className="w-full px-5 py-4 bg-white border border-[#2E2E2E] focus:outline-none focus:bg-[#FAFAFA] transition-all resize-none text-base"
-                      placeholder="Escribe tu mensaje aquí..."
-                      rows={5}
-                      maxLength={maxChars * 3}
-                      required
-                    />
-                    <div className="flex justify-between text-sm text-[#737373] mt-2">
-                      <span>{messageLength}/{maxChars * 3} caracteres</span>
-                      <span>{smsCount} SMS • {estimatedCost} coins</span>
-                    </div>
+                    <label className="text-sm text-[#737373]">Nombre</label>
+                    <p className="font-medium text-[#2E2E2E]">{profile?.full_name || "No configurado"}</p>
                   </div>
-
-                  {/* Submit */}
-                  <button
-                    type="submit"
-                    disabled={sending || !phoneNumber || !message}
-                    className="w-full bg-[#2E2E2E] text-white py-4 text-base font-semibold hover:bg-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                  >
-                    {sending ? "Enviando..." : `Enviar SMS (${estimatedCost} coins)`}
-                  </button>
-                </form>
-              </div>
-            </div>
-          )}
-
-          {/* HISTORY */}
-          {activeTab === "history" && (
-            <div>
-              <div className="mb-6">
-                <h1 className="text-2xl font-bold text-[#2E2E2E]">Historial de SMS</h1>
-                <p className="text-sm text-[#737373]">Revisa todos tus mensajes enviados</p>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                {history.length === 0 ? (
-                  <div className="p-12 text-center">
-                    <History className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                    <p className="text-[#737373] font-medium">No has enviado SMS aún</p>
-                  </div>
-                ) : (
-                  <div className="divide-y divide-gray-100">
-                    {history.map((sms) => (
-                      <div key={sms.id} className="p-4 hover:bg-gray-50 transition-colors">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <p className="font-medium text-[#2E2E2E]">{sms.phone_number}</p>
-                            <p className="text-sm text-[#737373] mt-1 line-clamp-2">{sms.message}</p>
-                            <p className="text-xs text-gray-400 mt-2">
-                              {new Date(sms.created_at).toLocaleDateString("es-ES", {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">
-                              {sms.cost} coins
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* SETTINGS */}
-          {activeTab === "settings" && (
-            <div>
-              <div className="mb-6">
-                <h1 className="text-2xl font-bold text-[#2E2E2E]">Configuración</h1>
-                <p className="text-sm text-[#737373]">Gestiona tu cuenta y preferencias</p>
-              </div>
-
-              <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
-                {/* Profile Info */}
-                <div>
-                  <h3 className="font-semibold text-[#2E2E2E] mb-4">Información de perfil</h3>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-sm text-[#737373]">Nombre</label>
-                      <p className="font-medium text-[#2E2E2E]">{profile?.full_name || "No configurado"}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm text-[#737373]">Email</label>
-                      <p className="font-medium text-[#2E2E2E]">{profile?.email}</p>
-                    </div>
+                  <div>
+                    <label className="text-sm text-[#737373]">Email</label>
+                    <p className="font-medium text-[#2E2E2E]">{profile?.email}</p>
                   </div>
                 </div>
+              </div>
 
-                <hr className="border-gray-100" />
-
-                {/* Balance */}
-                <div>
-                  <h3 className="font-semibold text-[#2E2E2E] mb-4">Balance</h3>
-                  <div className="flex items-center justify-between p-4 bg-[#E8E1D4]/30 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <Coins className="w-5 h-5 text-[#2E2E2E]" />
-                      <span className="font-medium">Coins disponibles</span>
-                    </div>
-                    <span className="text-2xl font-bold text-[#2E2E2E]">{profile?.credits_balance || 0}</span>
+              {/* Balance */}
+              <div className="bg-white border border-[#E5E5E5] rounded-xl p-6">
+                <h3 className="font-semibold text-[#2E2E2E] mb-4">Balance</h3>
+                <div className="flex items-center justify-between p-4 bg-[#E8E1D4]/30 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <SFIcon icon={sfDollarsignCircle} size={20} color="#2E2E2E" />
+                    <span className="font-medium">Coins disponibles</span>
                   </div>
-                  <a
-                    href="https://t.me/pedrobardaji?text=Hola, quiero comprar más coins"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center mt-3 text-sm text-[#2E2E2E] font-medium hover:underline"
-                  >
-                    Comprar más coins
-                    <ChevronRight className="w-4 h-4 ml-1" />
-                  </a>
+                  <span className="text-2xl font-bold text-[#2E2E2E]">{profile?.credits_balance || 0}</span>
                 </div>
+                <a
+                  href="https://t.me/pedrobardaji?text=Hola, quiero comprar más coins"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center mt-3 text-sm text-[#2E2E2E] font-medium hover:underline"
+                >
+                  Comprar más coins
+                  <SFIcon icon={sfChevronDown} size={16} color="#2E2E2E" className="ml-1 rotate-[-90deg]" />
+                </a>
+              </div>
 
-                <hr className="border-gray-100" />
-
-                {/* Account Actions */}
-                <div>
-                  <h3 className="font-semibold text-[#2E2E2E] mb-4">Cuenta</h3>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-red-200 text-red-600 rounded-xl hover:bg-red-50 transition-colors"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    <span className="font-medium">Cerrar sesión</span>
-                  </button>
-                </div>
+              {/* Account Actions */}
+              <div className="bg-white border border-[#E5E5E5] rounded-xl p-6">
+                <h3 className="font-semibold text-[#2E2E2E] mb-4">Cuenta</h3>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center px-4 py-3 border border-red-200 text-red-600 rounded-xl hover:bg-red-50 transition-colors"
+                >
+                  <span className="font-medium">Cerrar sesión</span>
+                </button>
               </div>
             </div>
-          )}
-        </div>
-      </main>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

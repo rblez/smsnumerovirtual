@@ -272,7 +272,6 @@ export async function POST(request: NextRequest) {
         operator: null,
         cost: totalCoinsCost,
         status: "sent",
-        delivery_status: innoveritData.delivery_status || "pending",
         api_response: innoveritData,
       });
 

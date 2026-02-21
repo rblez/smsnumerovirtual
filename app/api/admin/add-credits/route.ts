@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     }
 
     const creditAmount = parseFloat(amount);
-    if (isNaN(creditAmount) || creditAmount <= 0) {
+    if (isNaN(creditAmount) || creditAmount === 0) {
       return NextResponse.json(
         { error: "Invalid amount" },
         { status: 400 }
@@ -92,8 +92,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update credits
+    // Check if subtracting more than available
     const newBalance = profile.credits_balance + creditAmount;
+    if (newBalance < 0) {
+      return NextResponse.json(
+        { error: "Cannot subtract more credits than user has" },
+        { status: 400 }
+      );
+    }
+
+    // Update credits
     const { error: updateError } = await supabaseAdmin
       .from("profiles")
       .update({ credits_balance: newBalance })
@@ -103,16 +111,16 @@ export async function POST(request: NextRequest) {
       throw updateError;
     }
 
-    // Record credit purchase
+    // Record credit purchase/adjustment
     const { error: purchaseError } = await supabaseAdmin
       .from("credit_purchases")
       .insert({
         user_id: targetUserId,
         amount: creditAmount,
-        package_name: packageName || "Manual Admin",
+        package_name: packageName || (creditAmount > 0 ? "Manual Admin Add" : "Manual Admin Subtract"),
         payment_method: "admin_manual",
         status: "completed",
-        admin_notes: `Added by admin: ${user.email}`,
+        admin_notes: `${creditAmount > 0 ? 'Added' : 'Subtracted'} by admin: ${user.email}`,
       });
 
     if (purchaseError) {

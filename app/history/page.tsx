@@ -8,9 +8,11 @@ import {
   CheckCircle,
   X,
   Clock,
+  Coins,
 } from "lucide-react";
 import Layout from "../components/Layout";
 import Card from "../components/ui/Card";
+import { SkeletonTable } from "../components/ui/Skeleton";
 
 interface SMSHistory {
   id: string;
@@ -22,13 +24,8 @@ interface SMSHistory {
   created_at: string;
 }
 
-interface Profile {
-  credits_balance: number;
-}
-
 export default function History() {
   const [history, setHistory] = useState<SMSHistory[]>([]);
-  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -39,17 +36,6 @@ export default function History() {
         if (!user) {
           router.push("/login");
           return;
-        }
-
-        // Fetch profile
-        const { data: profileData } = await supabase
-          .from("profiles")
-          .select("credits_balance")
-          .eq("id", user.id)
-          .single();
-
-        if (profileData) {
-          setProfile(profileData);
         }
 
         // Fetch SMS history
@@ -101,9 +87,15 @@ export default function History() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#E8E1D4] flex items-center justify-center">
-        <div className="text-[#2E2E2E] text-lg font-medium">Cargando...</div>
-      </div>
+      <Layout>
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-8">
+            <div className="h-10 bg-[#E8E1D4] rounded w-64 mb-2" />
+            <div className="h-4 bg-[#E8E1D4] rounded w-80" />
+          </div>
+          <SkeletonTable rows={8} columns={6} />
+        </div>
+      </Layout>
     );
   }
 
@@ -164,8 +156,11 @@ export default function History() {
                       <td className="px-6 py-4 text-sm text-[#737373]">
                         {sms.country || "-"}
                       </td>
-                      <td className="px-6 py-4 text-sm font-semibold text-[#2E2E2E]">
-                        {sms.cost.toFixed(0)} SMS
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-1.5 text-sm font-semibold text-[#2E2E2E]">
+                          <Coins className="w-4 h-4 text-amber-500" />
+                          <span>{sms.cost.toFixed(0)}</span>
+                        </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">

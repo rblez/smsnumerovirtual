@@ -14,6 +14,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { SkeletonCard } from "../components/ui/Skeleton";
 
 export default function AccountSettings() {
   const router = useRouter();
@@ -122,8 +123,44 @@ export default function AccountSettings() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
-        <div className="text-[#2E2E2E] text-lg font-medium">Cargando...</div>
+      <div className="min-h-screen bg-[#FAFAFA]">
+        {/* Header Skeleton */}
+        <header className="bg-white border-b border-[#E5E5E5] px-6 py-4">
+          <div className="max-w-3xl mx-auto flex items-center justify-between">
+            <div className="h-6 bg-[#E8E1D4] rounded w-48" />
+            <div className="h-4 bg-[#E8E1D4] rounded w-32" />
+          </div>
+        </header>
+
+        <main className="max-w-3xl mx-auto px-6 py-12">
+          {/* Title Skeleton */}
+          <div className="h-10 bg-[#E8E1D4] rounded w-80 mb-8" />
+
+          {/* Profile Section Skeleton */}
+          <SkeletonCard className="mb-8" />
+
+          {/* Password Section Skeleton */}
+          <SkeletonCard className="mb-8" />
+
+          {/* Account Info Skeleton */}
+          <div className="bg-[#E8E1D4]/20 border border-[#E8E1D4] rounded-2xl p-6">
+            <div className="h-5 bg-[#E8E1D4] rounded w-48 mb-4" />
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <div className="h-4 bg-[#E8E1D4] rounded w-24" />
+                <div className="h-4 bg-[#E8E1D4] rounded w-16" />
+              </div>
+              <div className="flex justify-between">
+                <div className="h-4 bg-[#E8E1D4] rounded w-32" />
+                <div className="h-4 bg-[#E8E1D4] rounded w-20" />
+              </div>
+              <div className="flex justify-between">
+                <div className="h-4 bg-[#E8E1D4] rounded w-28" />
+                <div className="h-4 bg-[#E8E1D4] rounded w-18" />
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
@@ -134,7 +171,7 @@ export default function AccountSettings() {
       <header className="bg-white border-b border-[#E5E5E5] px-6 py-4">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <span className="font-[family-name:var(--font-mona-sans)] font-bold text-[#2E2E2E]">SMS Número Virtual</span>
+            <span className="font-bold text-[#2E2E2E]">SMS Número Virtual</span>
           </Link>
           <Link 
             href="/dashboard" 
@@ -302,6 +339,31 @@ export default function AccountSettings() {
           </section>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-100 pt-8 pb-6 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-500 text-sm text-center md:text-left">
+              © 2026 SMS Número Virtual. Todos los derechos reservados.
+            </p>
+            <div className="flex items-center gap-6">
+              <Link href="/terms" className="text-gray-500 hover:text-gray-900 transition-colors text-sm">
+                Términos de Servicio
+              </Link>
+              <Link href="/privacy" className="text-gray-500 hover:text-gray-900 transition-colors text-sm">
+                Políticas de Privacidad
+              </Link>
+              <span className="text-gray-300">|</span>
+              <a href="https://t.me/smsnumerovirtual" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-500 transition-colors">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

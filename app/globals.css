@@ -1,25 +1,85 @@
 @import "tailwindcss";
 @import "flag-icons/css/flag-icons.min.css";
 
+/* CursorGothic - Sans Serif */
+@font-face {
+  font-family: "CursorGothic";
+  src: url("/CursorGothic_Regular-s.p.a361088d.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "CursorGothic";
+  src: url("/CursorGothic_Bold-s.p.95169710.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "CursorGothic";
+  src: url("/CursorGothic_Italic-s.p.00bb2606.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "CursorGothic";
+  src: url("/CursorGothic_BoldItalic-s.p.036859cb.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* BerkeleyMono - Monospace */
+@font-face {
+  font-family: "BerkeleyMono";
+  src: url("/BerkeleyMono_Regular.p.e4888174.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BerkeleyMono";
+  src: url("/BerkeleyMono_Oblique.p.f08c3069.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* SF Pro Rounded */
 @font-face {
   font-family: "SF Pro Text";
-  src: url("/SF-Pro-Text-Medium.otf") format("opentype");
+  src: url("/SF-Pro-Rounded-Semibold.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  --font-display: var(--font-mona-sans), -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  --font-sans: "SF Pro Text", "CursorGothic", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "SF Mono", "BerkeleyMono", "JetBrains Mono", monospace;
+  --font-display: "SF Pro Text", "CursorGothic", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 :root {
   /* Colors from palette */
-  --color-primary: #E8E1D4;
-  --color-secondary: #3E3E3E;
-  --color-accent: #2E2E2E;
   --color-background: #FFFFFF;
+
+  /* Brand (logo) palette - Monochromatic with blue accents */
+  --color-primary: #000000;
+  --color-primary-2: #1A1A1A;
+  --color-primary-3: #333333;
+  --color-muted: #666666;
+
+  /* Secondary - Blues from image */
+  --color-secondary: #D6EAF4;
+  --color-secondary-2: #CFDFE8;
+  --color-accent: #4b6a6c;
 }
 
 * {
@@ -33,22 +93,22 @@ body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-sans);
   background-color: var(--color-background);
-  color: var(--color-secondary);
+  color: var(--color-primary);
   line-height: 1.6;
 }
 
 h1, h2, h3 {
-  font-family: var(--font-bricolage-grotesque), -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 
 h4, h5, h6 {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-family: var(--font-display);
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 
 /* Custom scrollbar */
@@ -57,22 +117,22 @@ h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-primary);
+  background: var(--color-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-secondary);
+  background: var(--color-muted);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
+  background: var(--color-primary-3);
 }
 
 /* Selection color */
 ::selection {
-  background-color: var(--color-primary);
-  color: var(--color-accent);
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
 }
 
 /* Animations */

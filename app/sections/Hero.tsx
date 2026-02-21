@@ -1,18 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { SFIcon } from '@bradleyhodges/sfsymbols-react'
+import { sfGlobe, sfChevronRight } from '@bradleyhodges/sfsymbols'
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen bg-[#E8E1D4] overflow-hidden">
+    <section className="relative min-h-screen bg-[#4b6a6c] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 lg:pt-40 lg:pb-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="text-center lg:text-left">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/60 border border-[#2E2E2E]/10 mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 border border-[#2E2E2E]/10 mb-8">
+              <SFIcon icon={sfGlobe} size={16} color="#3E3E3E" />
               <span className="text-sm font-medium text-[#3E3E3E]">
-                ✨ Envía SMS a más de 200 países
+                Envía SMS a más de 200 países
               </span>
             </div>
 
@@ -31,11 +33,11 @@ export default function Hero() {
                 className="inline-flex items-center space-x-2 bg-[#2E2E2E] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#3E3E3E] transition-all duration-200 shadow-lg hover:shadow-xl"
               >
                 <span>Comenzar ahora</span>
-                <ArrowRight className="w-5 h-5" />
+                <SFIcon icon={sfChevronRight} size={20} color="white" />
               </Link>
               <a
                 href="#features"
-                className="inline-flex items-center space-x-2 bg-white text-[#2E2E2E] px-8 py-4 rounded-xl font-semibold hover:bg-[#F5F5F5] transition-all duration-200 border border-[#E8E1D4]"
+                className="inline-flex items-center space-x-2 bg-white text-[#2E2E2E] px-8 py-4 rounded-xl font-semibold hover:bg-(--color-secondary) transition-all duration-200 border border-(--color-secondary)"
               >
                 <span>Ver cómo funciona</span>
               </a>
@@ -43,15 +45,24 @@ export default function Hero() {
 
             <div className="mt-12 grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
               <div className="text-center lg:text-left">
-                <div className="text-2xl sm:text-3xl font-bold text-[#2E2E2E]">200+</div>
+                <div className="flex items-center justify-center lg:justify-start gap-2 mb-1">
+                  <SFIcon icon={sfGlobe} size={24} color="#2E2E2E" />
+                  <div className="text-2xl sm:text-3xl font-bold text-[#2E2E2E]">200+</div>
+                </div>
                 <div className="text-xs sm:text-sm text-[#3E3E3E] mt-1">Países</div>
               </div>
               <div className="text-center lg:text-left">
-                <div className="text-2xl sm:text-3xl font-bold text-[#2E2E2E]">0.05$</div>
+                <div className="flex items-center justify-center lg:justify-start gap-2 mb-1">
+                  <SFIcon icon={sfGlobe} size={24} color="#2E2E2E" />
+                  <div className="text-2xl sm:text-3xl font-bold text-[#2E2E2E]">0.05$</div>
+                </div>
                 <div className="text-xs sm:text-sm text-[#3E3E3E] mt-1">Desde</div>
               </div>
               <div className="text-center lg:text-left">
-                <div className="text-2xl sm:text-3xl font-bold text-[#2E2E2E]">24/7</div>
+                <div className="flex items-center justify-center lg:justify-start gap-2 mb-1">
+                  <SFIcon icon={sfGlobe} size={24} color="#2E2E2E" />
+                  <div className="text-2xl sm:text-3xl font-bold text-[#2E2E2E]">24/7</div>
+                </div>
                 <div className="text-xs sm:text-sm text-[#3E3E3E] mt-1">Soporte</div>
               </div>
             </div>
@@ -64,7 +75,7 @@ export default function Hero() {
                 <div className="bg-white rounded-[2.5rem] overflow-hidden">
                   <div className="p-6 space-y-4">
                     <div className="flex justify-end">
-                      <div className="bg-[#E8E1D4] rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%]">
+                      <div className="bg-(--color-secondary) rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%]">
                         <p className="text-sm text-[#2E2E2E]">Hola, ¿cómo estás?</p>
                       </div>
                     </div>
@@ -74,7 +85,7 @@ export default function Hero() {
                       </div>
                     </div>
                     <div className="flex justify-end">
-                      <div className="bg-[#E8E1D4] rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%]">
+                      <div className="bg-(--color-secondary) rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%]">
                         <p className="text-sm text-[#2E2E2E]">Te envío los detalles 📱</p>
                       </div>
                     </div>

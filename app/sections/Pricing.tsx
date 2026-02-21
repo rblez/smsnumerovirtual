@@ -11,7 +11,7 @@ export default function Pricing() {
   const telegramLink = `https://t.me/pedrobardaji?text=Hola, quiero comprar ${selectedCoins} coins`;
 
   return (
-    <section id="precios" className="py-20 bg-[#E8E1D4]">
+    <section id="precios" className="py-20 bg-[var(--color-secondary)]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-[#2E2E2E] mb-4">
@@ -46,7 +46,7 @@ export default function Pricing() {
           </div>
 
           {/* Resumen */}
-          <div className="bg-[#E8E1D4] rounded-xl p-6 mb-8">
+          <div className="bg-white rounded-xl p-6 mb-8 border border-[var(--color-secondary)]">
             <div className="flex items-center justify-between mb-4">
               <span className="text-[#3E3E3E]">Cantidad:</span>
               <span className="text-xl font-bold text-[#2E2E2E]">{selectedCoins} coins</span>

@@ -1,0 +1,25 @@
+# llms.txt - SMS Número Virtual
+# Guidelines for LLM crawlers accessing this website
+
+## Website Description
+SMS Número Virtual es una plataforma de envío de SMS internacionales.
+URL: https://smsnumerovirtual.com
+
+## Allowed Content for LLMs
+- Páginas públicas: /, /faq, /terms, /privacy
+- Información de productos y precios
+- Guías de uso y documentación
+
+## Disallowed Content
+- NO indexar: /admin/*, /api/*, /~/* (user dashboards)
+- NO indexar: /auth/* (authentication flows)
+- NO indexar datos de usuarios ni información personal
+- NO indexar código fuente o archivos internos
+
+## Contact
+Para consultas sobre el uso de datos:
+Telegram: @pedrobardaji
+Email: admin@smsnumerovirtual.com
+
+## Last Updated
+2025-02-20

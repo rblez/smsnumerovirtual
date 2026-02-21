@@ -64,6 +64,7 @@ export async function POST(request: Request) {
     }
 
     // Create profile for the new user with custom ID
+    const isAdmin = email === 'pedroenriquebar@gmail.com' || email === 'rblez@proton.me';
     const { error: profileError } = await supabaseAdmin
       .from("profiles")
       .insert({
@@ -71,6 +72,7 @@ export async function POST(request: Request) {
         custom_id: customId,
         full_name: fullName || null,
         credits_balance: 0,
+        role: isAdmin ? 'admin' : 'user',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       });

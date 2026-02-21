@@ -69,7 +69,7 @@ export default function ForgotPasswordPage() {
               height={40}
               className="h-10 w-auto"
             />
-            <span className="font-[family-name:var(--font-mona-sans)] text-xl font-bold text-[#2E2E2E]">
+            <span className="text-xl font-bold text-[#2E2E2E]">
               SMS Número Virtual
             </span>
           </Link>

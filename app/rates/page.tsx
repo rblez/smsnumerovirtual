@@ -142,8 +142,77 @@ export default function Rates() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#E8E1D4] flex items-center justify-center">
-        <div className="text-[#2E2E2E] text-lg font-medium">Cargando...</div>
+      <div className="min-h-screen bg-[#E8E1D4]">
+        {/* Header Skeleton */}
+        <header className="bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="h-6 bg-[#E8E1D4] rounded w-48" />
+              <div className="flex items-center space-x-2 bg-[#E8E1D4] px-3 py-1.5 rounded-lg">
+                <div className="w-4 h-4 bg-[#2E2E2E] rounded" />
+                <div className="h-4 bg-[#2E2E2E] rounded w-16" />
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content Skeleton */}
+        <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Back Button Skeleton */}
+          <div className="h-4 bg-[#E8E1D4] rounded w-32 mb-6" />
+
+          {/* Title Skeleton */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-8 bg-[#E8E1D4] rounded" />
+            <div className="h-8 bg-[#E8E1D4] rounded w-48" />
+          </div>
+
+          {/* Description Skeleton */}
+          <div className="h-4 bg-[#E8E1D4] rounded w-80 mb-6" />
+
+          {/* Search Skeleton */}
+          <div className="h-12 bg-white border border-gray-200 rounded-xl mb-6" />
+
+          {/* Table Skeleton */}
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-[#E8E1D4]">
+                <tr>
+                  <th className="px-6 py-4">
+                    <div className="h-4 bg-[#2E2E2E] rounded w-12" />
+                  </th>
+                  <th className="px-6 py-4">
+                    <div className="h-4 bg-[#2E2E2E] rounded w-24" />
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <tr key={i} className="border-b border-gray-100">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-6 h-4 bg-[#E8E1D4] rounded" />
+                        <div className="h-4 bg-[#E8E1D4] rounded w-32" />
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="h-4 bg-[#E8E1D4] rounded w-16 mx-auto" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Note Skeleton */}
+          <div className="mt-6 bg-[#E8E1D4]/20 border border-[#E8E1D4]/40 rounded-xl p-4">
+            <div className="space-y-2">
+              <div className="h-4 bg-[#E8E1D4] rounded w-full" />
+              <div className="h-4 bg-[#E8E1D4] rounded w-3/4" />
+              <div className="h-4 bg-[#E8E1D4] rounded w-2/3" />
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
@@ -155,7 +224,7 @@ export default function Rates() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="font-[family-name:var(--font-mona-sans)] text-xl font-bold text-[#2E2E2E]">SMS Número Virtual</span>
+              <span className="text-xl font-bold text-[#2E2E2E]">SMS Número Virtual</span>
             </Link>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 bg-[#E8E1D4] px-3 py-1.5 rounded-lg">

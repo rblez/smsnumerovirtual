@@ -1,28 +1,24 @@
-import { 
-  Globe, 
-  CreditCard, 
-  ShieldCheck, 
-  Send 
-} from "lucide-react";
+import { SFIcon } from '@bradleyhodges/sfsymbols-react'
+import { sfGlobe, sfCreditcard, sfShield, sfBubbleLeft } from '@bradleyhodges/sfsymbols'
 
 const features = [
   {
-    icon: Globe,
+    icon: sfGlobe,
     title: "Cobertura Global",
     description: "Envía SMS a más de 200 países con tarifas competitivas y entrega confiable."
   },
   {
-    icon: CreditCard,
+    icon: sfCreditcard,
     title: "Sistema de Créditos",
     description: "Compra créditos prepagados y úsalos cuando necesites. Sin suscripciones ni cargos ocultos."
   },
   {
-    icon: ShieldCheck,
+    icon: sfShield,
     title: "Seguro y Confiable",
     description: "Tus datos y mensajes están protegidos. Plataforma estable con alta disponibilidad."
   },
   {
-    icon: Send,
+    icon: sfBubbleLeft,
     title: "Envío Instantáneo",
     description: "Los mensajes se envían en segundos. Seguimiento en tiempo real del estado de entrega."
   }
@@ -45,10 +41,10 @@ export default function Features() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="p-6 rounded-2xl bg-[#E8E1D4]/30 border border-[#E8E1D4] hover:bg-[#E8E1D4]/50 transition-colors duration-200"
+              className="p-6 rounded-2xl bg-[var(--color-secondary)]/30 border border-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/50 transition-colors duration-200"
             >
               <div className="w-12 h-12 rounded-xl bg-[#2E2E2E] flex items-center justify-center mb-4">
-                <feature.icon className="w-6 h-6 text-white" />
+                <SFIcon icon={feature.icon} size={24} color="white" />
               </div>
               <h3 className="text-xl font-semibold text-[#2E2E2E] mb-2">
                 {feature.title}

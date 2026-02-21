@@ -10,6 +10,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@bradleyhodges/sfsymbols": "^7.0.4",
+    "@bradleyhodges/sfsymbols-react": "^7.0.4",
+    "@bradleyhodges/sfsymbols-types": "^7.0.4",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.97.0",
     "cobe": "^0.6.5",
