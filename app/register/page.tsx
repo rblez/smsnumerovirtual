@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SFIcon } from '@bradleyhodges/sfsymbols-react'
-import { sfEnvelope, sfPerson, sfLock, sfEye, sfEyeSlash, sfChevronLeft } from '@bradleyhodges/sfsymbols'
+import { sfEnvelope, sfPerson, sfLock, sfChevronLeft } from '@bradleyhodges/sfsymbols'
 import Image from "next/image";
 
 export default function RegisterPage() {
@@ -12,7 +12,6 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -218,7 +217,7 @@ export default function RegisterPage() {
               <SFIcon icon={sfLock} size={20} color={passwordFocused ? '#2E2E2E' : '#737373'} className="absolute left-3 top-1/2 -translate-y-1/2 transition-colors" />
               <input
                 id="password"
-                type={showPassword ? "text" : "password"}
+                type="password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
@@ -227,19 +226,12 @@ export default function RegisterPage() {
                 onFocus={() => setPasswordFocused(true)}
                 onBlur={() => setPasswordFocused(false)}
                 placeholder="Mínimo 6 caracteres"
-                className={`h-12 w-full rounded-xl border bg-white px-4 pl-10 pr-14 text-[15px] text-[#2E2E2E] placeholder:text-[#A3A3A3] shadow-sm outline-none transition-colors focus:ring-2 focus:ring-[#2E2E2E]/10 ${passwordError ? 'border-red-300 focus:border-red-500' : 'border-[#E5E5E5] focus:border-[#2E2E2E]/40'}`}
+                className={`h-12 w-full rounded-xl border bg-white px-4 pl-10 text-[15px] text-[#2E2E2E] placeholder:text-[#A3A3A3] shadow-sm outline-none transition-colors focus:ring-2 focus:ring-[#2E2E2E]/10 ${passwordError ? 'border-red-300 focus:border-red-500' : 'border-[#E5E5E5] focus:border-[#2E2E2E]/40'}`}
                 required
                 minLength={6}
                 data-lpignore="true"
                 data-bwignore="true"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373] hover:text-[#2E2E2E] transition-colors z-10"
-              >
-                <SFIcon icon={showPassword ? sfEyeSlash : sfEye} size={20} color="currentColor" />
-              </button>
             </div>
             {passwordError && (
               <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
@@ -258,7 +250,7 @@ export default function RegisterPage() {
               <SFIcon icon={sfLock} size={20} color={confirmPasswordFocused ? '#2E2E2E' : '#737373'} className="absolute left-3 top-1/2 -translate-y-1/2 transition-colors" />
               <input
                 id="confirmPassword"
-                type={showPassword ? "text" : "password"}
+                type="password"
                 value={confirmPassword}
                 onChange={(e) => {
                   setConfirmPassword(e.target.value);
@@ -267,18 +259,11 @@ export default function RegisterPage() {
                 onFocus={() => setConfirmPasswordFocused(true)}
                 onBlur={() => setConfirmPasswordFocused(false)}
                 placeholder="Repite tu contraseña"
-                className={`h-12 w-full rounded-xl border bg-white px-4 pl-10 pr-14 text-[15px] text-[#2E2E2E] placeholder:text-[#A3A3A3] shadow-sm outline-none transition-colors focus:ring-2 focus:ring-[#2E2E2E]/10 ${confirmPasswordError ? 'border-red-300 focus:border-red-500' : 'border-[#E5E5E5] focus:border-[#2E2E2E]/40'}`}
+                className={`h-12 w-full rounded-xl border bg-white px-4 pl-10 text-[15px] text-[#2E2E2E] placeholder:text-[#A3A3A3] shadow-sm outline-none transition-colors focus:ring-2 focus:ring-[#2E2E2E]/10 ${confirmPasswordError ? 'border-red-300 focus:border-red-500' : 'border-[#E5E5E5] focus:border-[#2E2E2E]/40'}`}
                 required
                 data-lpignore="true"
                 data-bwignore="true"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373] hover:text-[#2E2E2E] transition-colors z-10"
-              >
-                <SFIcon icon={showPassword ? sfEyeSlash : sfEye} size={20} color="currentColor" />
-              </button>
             </div>
             {confirmPasswordError && (
               <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
@@ -298,11 +283,11 @@ export default function RegisterPage() {
             />
             <label htmlFor="terms" className="text-sm text-[#737373] leading-relaxed">
               Acepto los{" "}
-              <Link href="/terms" className="text-[#2E2E2E] font-medium hover:underline">
+              <Link href="/terms-of-service" className="text-[#2E2E2E] font-medium hover:underline">
                 términos de servicio
               </Link>{" "}
               y la{" "}
-              <Link href="/privacy" className="text-[#2E2E2E] font-medium hover:underline">
+              <Link href="/privacy-policy" className="text-[#2E2E2E] font-medium hover:underline">
                 política de privacidad
               </Link>
             </label>
@@ -347,27 +332,11 @@ export default function RegisterPage() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-100 pt-8 pb-6 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-sm text-center md:text-left">
-              2026 SMS Número Virtual. Todos los derechos reservados.
-            </p>
-            <div className="flex items-center gap-6">
-              <Link href="/terms" className="text-gray-500 hover:text-gray-900 transition-colors text-sm">
-                Términos de Servicio
-              </Link>
-              <Link href="/privacy" className="text-gray-500 hover:text-gray-900 transition-colors text-sm">
-                Políticas de Privacidad
-              </Link>
-              <span className="text-gray-300">|</span>
-              <a href="https://t.me/smsnumerovirtual" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-500 transition-colors">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
+      <footer className="pt-8 pb-6 px-4 sm:px-6 lg:px-8">
+        <div className="mt-16 pt-8 border-t border-[#E5E5E5] text-center">
+          <p className="text-[10px] tracking-wide text-[#A0A0A0]">
+            © 2026 SMS Número Virtual. Todos los derechos reservados.
+          </p>
         </div>
       </footer>
     </div>

@@ -4,19 +4,18 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { SFIcon } from '@bradleyhodges/sfsymbols-react'
-import { Coins } from "lucide-react";
 import { 
   sfClockCircle,
   sfGear,
-  sfPerson,
   sfDollarsignCircle,
   sfCheckmarkCircle,
   sfExclamationmarkCircle,
   sfBubbleLeft,
   sfChevronDown,
+  sfExclamationmarkTriangle,
+  sfQuestionmarkCircle,
 } from '@bradleyhodges/sfsymbols'
 
 interface Profile {
@@ -281,7 +280,8 @@ export default function DashboardPage() {
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [activeTab, setActiveTab] = useState<"home" | "history" | "settings">("home");
-  const [loading, setLoading] = useState(true);
+  // Loading state removed - page loads directly without loading screen
+  // const [loading, setLoading] = useState(true);
 
   // SMS State
   const [selectedCountry, setSelectedCountry] = useState<Country>(countries[0]);
@@ -290,6 +290,15 @@ export default function DashboardPage() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [smsResult, setSmsResult] = useState<{ success: boolean; message: string } | null>(null);
+
+  // Delete Account State
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const [deleteEmailConfirm, setDeleteEmailConfirm] = useState("");
+  const [deleteTextConfirm, setDeleteTextConfirm] = useState("");
+  const [showDeleteHelp, setShowDeleteHelp] = useState(false);
+
+  // Logout confirmation state
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // History State
   const [history, setHistory] = useState<SMSHistory[]>([]);
@@ -351,8 +360,6 @@ export default function DashboardPage() {
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
-    } finally {
-      setLoading(false);
     }
   }, [userId, router]);
 
@@ -429,10 +436,63 @@ export default function DashboardPage() {
     router.push("/");
   };
 
+  const handleDeleteAccount = async () => {
+    // Double confirmation check
+    if (deleteEmailConfirm !== profile?.email) {
+      alert("El correo electrónico no coincide");
+      return;
+    }
+
+    if (deleteTextConfirm !== "quiero eliminar mi cuenta") {
+      alert("El texto de confirmación no es correcto");
+      return;
+    }
+
+    try {
+      // Delete user data first (if needed)
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        alert("Sesión expirada");
+        return;
+      }
+
+      // Note: Supabase doesn't allow direct user deletion from client side
+      // This would need to be handled server-side or through admin functions
+      alert("La eliminación de cuentas debe ser manejada por un administrador. Contacta con soporte.");
+
+      // Close modal and reset state
+      setShowDeleteAccountModal(false);
+      setDeleteEmailConfirm("");
+      setDeleteTextConfirm("");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      alert("Error al eliminar la cuenta");
+    }
+  };
+
   const getCoinsCost = (dialCode: string): number => {
-    if (dialCode === "+53" || dialCode === "+1") return 1;
-    if (["+52", "+34", "+44", "+49", "+33", "+39", "+55", "+54", "+57"].includes(dialCode)) return 2;
-    return 3;
+    // Convert dial code to pricing tier based on current rates
+    // This should match the backend logic for consistency
+    const COIN_TO_DOLLAR_RATIO = 0.09;
+    
+    // Default dollar prices for each dial code (should match sms_rates table)
+    const defaultPrices: { [key: string]: number } = {
+      "+53": 0.09, // Cuba
+      "+1": 0.05,  // USA/Canada (using lowest price)
+      "+52": 0.12, // Mexico
+      "+34": 0.15, // Spain
+      "+44": 0.15, // UK (approximate)
+      "+49": 0.15, // Germany (approximate)
+      "+33": 0.15, // France (approximate)
+      "+39": 0.15, // Italy (approximate)
+      "+55": 0.15, // Brazil (approximate)
+      "+54": 0.15, // Argentina (approximate)
+      "+57": 0.15, // Colombia (approximate)
+    };
+    
+    const priceInDollars = defaultPrices[dialCode] || 0.27; // Default ~3 coins
+    const coinsCost = priceInDollars / COIN_TO_DOLLAR_RATIO;
+    return Math.round(coinsCost);
   };
 
   const getPhonePlaceholder = (countryCode: string): string => {
@@ -503,26 +563,10 @@ export default function DashboardPage() {
 
   const estimatedCost = getCoinsCost(selectedCountry.dialCode) * smsCount;
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-linear-to-b from-[#FAFAFA] to-[#E8E1D4]/30 px-4 py-10 lg:px-6">
-        <div className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-md flex-col justify-center items-center">
-          <motion.div
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            <Image src="/isotipo.png" alt="SMS Número Virtual" width={64} height={64} className="h-16 w-auto" />
-          </motion.div>
-          <p className="mt-4 text-lg font-medium text-[#2E2E2E]">Cargando...</p>
-        </div>
-      </div>
-    );
-  }
-
   const menuItems = [
     { id: "home", label: "Enviar SMS", icon: sfBubbleLeft },
     { id: "history", label: "Historial", icon: sfClockCircle },
-    { id: "settings", label: "Configuración", icon: sfGear },
+    { id: "settings", label: "Cuenta", icon: sfGear },
   ];
 
   return (
@@ -545,17 +589,26 @@ export default function DashboardPage() {
         <div className="mb-6 p-4 bg-white rounded-xl border border-[#E5E5E5]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#2E2E2E] flex items-center justify-center">
-                <SFIcon icon={sfPerson} size={20} color="white" />
+              <div className="w-10 h-10 rounded-full bg-[#2E2E2E] flex items-center justify-center text-white font-semibold text-lg">
+                {profile?.full_name?.charAt(0).toUpperCase() || "U"}
               </div>
               <div>
                 <p className="font-medium text-[#2E2E2E] text-sm">{profile?.full_name || "Usuario"}</p>
                 <p className="text-xs text-[#737373]">{profile?.email}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <SFIcon icon={sfDollarsignCircle} size={16} color="#2E2E2E" />
-              <span className="font-bold text-[#2E2E2E] text-sm">{profile?.credits_balance || 0}</span>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <SFIcon icon={sfDollarsignCircle} size={16} color="#2E2E2E" />
+                <span className="font-bold text-[#2E2E2E] text-sm">{profile?.credits_balance || 0}</span>
+              </div>
+              <button
+                onClick={() => window.location.href = '/#pricing'}
+                className="px-4 py-2 bg-[#2E2E2E] text-white text-sm font-semibold rounded-xl hover:bg-[#3E3E3E] transition-colors"
+                title="Comprar coins"
+              >
+                Recargar
+              </button>
             </div>
           </div>
         </div>
@@ -573,7 +626,7 @@ export default function DashboardPage() {
               }`}
             >
               <SFIcon icon={item.icon} size={16} color={activeTab === item.id ? "white" : "currentColor"} />
-              {item.label}
+              <span className="hidden sm:inline">{item.label}</span>
             </button>
           ))}
         </div>
@@ -581,6 +634,11 @@ export default function DashboardPage() {
         {/* HOME - Send SMS */}
         {activeTab === "home" && (
             <div>
+              <div className="mb-8">
+                <h1 className="font-display text-2xl md:text-3xl font-normal text-[#2E2E2E] tracking-[-0.02em] mb-2">Enviar SMS</h1>
+                <p className="font-sans text-base text-[#737373] tracking-[-0.01em]">Envía mensajes de texto a cualquier número internacional</p>
+              </div>
+
               {smsResult && (
                 <div
                   className={`mb-6 p-4 flex items-center gap-3 rounded-xl ${
@@ -613,7 +671,7 @@ export default function DashboardPage() {
                       </button>
 
                       {showCountryDropdown && (
-                        <div className="absolute top-full left-0 mt-1 w-80 max-h-96 overflow-y-auto bg-white border border-[#E5E5E5] shadow-xl z-[100] rounded-xl">
+                        <div className="absolute top-full left-0 mt-1 w-80 max-h-96 overflow-y-auto bg-white border border-[#E5E5E5] shadow-xl z-100 rounded-xl">
                           {countries.map((country) => (
                             <button
                               key={country.code}
@@ -672,8 +730,9 @@ export default function DashboardPage() {
                   <div className="flex justify-between text-sm text-[#737373] mt-2">
                     <span>{messageLength}/{maxChars * 3} caracteres</span>
                     <span className="flex items-center gap-1">
-                      {smsCount} SMS • {estimatedCost}
+                      {smsCount} SMS • 
                       <SFIcon icon={sfDollarsignCircle} size={14} color="#737373" />
+                      {estimatedCost}
                     </span>
                   </div>
                 </div>
@@ -707,26 +766,28 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 {history.map((sms) => (
                   <div key={sms.id} className="bg-white border border-[#E5E5E5] rounded-xl p-4 hover:bg-[#FAFAFA] transition-colors">
-                    <div className="flex items-start justify-between">
+                    <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
                         <p className="font-medium text-[#2E2E2E] text-sm">{sms.phone_number}</p>
                         <p className="text-sm text-[#737373] mt-1 line-clamp-2">{sms.message}</p>
-                        <p className="text-xs text-gray-400 mt-2">
-                          {new Date(sms.created_at).toLocaleDateString("es-ES", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
                       </div>
                       <div className="text-right ml-4">
                         <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">
-                          <Coins className="w-3 h-3" />
+                          <SFIcon icon={sfDollarsignCircle} size={12} color="currentColor" />
                           {sms.cost}
                         </span>
                       </div>
+                    </div>
+                    <div className="flex justify-end">
+                      <p className="text-xs text-gray-400">
+                        {new Date(sms.created_at).toLocaleDateString("es-ES", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -738,16 +799,16 @@ export default function DashboardPage() {
         {/* SETTINGS */}
         {activeTab === "settings" && (
           <div>
-            <div className="mb-6">
-              <h1 className="text-xl font-bold text-[#2E2E2E]">Configuración</h1>
-              <p className="text-sm text-[#737373]">Gestiona tu cuenta y preferencias</p>
+            <div className="mb-8">
+              <h1 className="font-display text-2xl md:text-3xl font-normal text-[#2E2E2E] tracking-[-0.02em] mb-2">Cuenta</h1>
+              <p className="font-sans text-base text-[#737373] tracking-[-0.01em]">Gestiona tu cuenta y preferencias</p>
             </div>
 
             <div className="space-y-6">
-              {/* Profile Info */}
+              {/* Unified Account Card */}
               <div className="bg-white border border-[#E5E5E5] rounded-xl p-6">
                 <h3 className="font-semibold text-[#2E2E2E] mb-4">Información de perfil</h3>
-                <div className="space-y-3">
+                <div className="space-y-3 mb-6">
                   <div>
                     <label className="text-sm text-[#737373]">Nombre</label>
                     <p className="font-medium text-[#2E2E2E]">{profile?.full_name || "No configurado"}</p>
@@ -757,43 +818,133 @@ export default function DashboardPage() {
                     <p className="font-medium text-[#2E2E2E]">{profile?.email}</p>
                   </div>
                 </div>
-              </div>
 
-              {/* Balance */}
-              <div className="bg-white border border-[#E5E5E5] rounded-xl p-6">
-                <h3 className="font-semibold text-[#2E2E2E] mb-4">Balance</h3>
-                <div className="flex items-center justify-between p-4 bg-[#E8E1D4]/30 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <SFIcon icon={sfDollarsignCircle} size={20} color="#2E2E2E" />
-                    <span className="font-medium">Coins disponibles</span>
-                  </div>
-                  <span className="text-2xl font-bold text-[#2E2E2E]">{profile?.credits_balance || 0}</span>
+                <div className="border-t border-[#E5E5E5] pt-4">
+                  <button
+                    onClick={() => setShowLogoutConfirm(true)}
+                    className="w-full flex items-center justify-center px-4 py-3 border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition-colors"
+                  >
+                    <span className="font-medium">Cerrar sesión</span>
+                  </button>
                 </div>
-                <a
-                  href="https://t.me/pedrobardaji?text=Hola, quiero comprar más coins"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center mt-3 text-sm text-[#2E2E2E] font-medium hover:underline"
-                >
-                  Comprar más coins
-                  <SFIcon icon={sfChevronDown} size={16} color="#2E2E2E" className="ml-1 rotate-[-90deg]" />
-                </a>
-              </div>
-
-              {/* Account Actions */}
-              <div className="bg-white border border-[#E5E5E5] rounded-xl p-6">
-                <h3 className="font-semibold text-[#2E2E2E] mb-4">Cuenta</h3>
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center justify-center px-4 py-3 border border-red-200 text-red-600 rounded-xl hover:bg-red-50 transition-colors"
-                >
-                  <span className="font-medium">Cerrar sesión</span>
-                </button>
               </div>
             </div>
           </div>
         )}
       </div>
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full mx-4">
+            <h3 className="text-xl font-bold text-[#2E2E2E] mb-2">Cerrar sesión</h3>
+            <p className="text-gray-600 mb-6">
+              ¿Estás seguro de que deseas cerrar sesión?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={handleLogout}
+                className="flex-1 bg-[#2E2E2E] text-white py-3 rounded-xl font-semibold hover:bg-[#3E3E3E] transition-colors"
+              >
+                Sí, cerrar sesión
+              </button>
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="flex-1 bg-gray-200 text-[#2E2E2E] py-3 rounded-xl font-semibold hover:bg-gray-300 transition-colors"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteAccountModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+            <h3 className="text-xl font-bold text-red-600 mb-4">Eliminar Cuenta</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <SFIcon icon={sfExclamationmarkTriangle} size={20} color="#DC2626" />
+              <p className="text-red-600 font-medium">Esta acción no se puede deshacer</p>
+              <div className="relative">
+                <button
+                  onMouseEnter={() => setShowDeleteHelp(true)}
+                  onMouseLeave={() => setShowDeleteHelp(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <SFIcon icon={sfQuestionmarkCircle} size={16} color="currentColor" />
+                </button>
+                {showDeleteHelp && (
+                  <div className="absolute left-0 top-full mt-2 w-80 p-4 bg-gray-900 text-white text-sm rounded-lg shadow-lg z-50">
+                    <div className="space-y-2">
+                      <p className="font-semibold text-red-400">¿Qué se elimina?</p>
+                      <ul className="space-y-1 text-gray-300">
+                        <li>• Tu perfil y datos personales</li>
+                        <li>• Historial completo de SMS enviados</li>
+                        <li>• Balance de coins y créditos</li>
+                        <li>• Configuración de cuenta</li>
+                        <li>• Acceso a la plataforma</li>
+                      </ul>
+                      <p className="text-xs text-gray-400 mt-2">Esta acción es irreversible.</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <p className="text-[#3E3E3E] mb-6">
+              Para confirmar la eliminación de tu cuenta, por favor ingresa tu correo electrónico y escribe &ldquo;quiero eliminar mi cuenta&rdquo;.
+            </p>
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-[#3E3E3E] mb-2">
+                  Confirma tu correo electrónico
+                </label>
+                <input
+                  type="email"
+                  value={deleteEmailConfirm}
+                  onChange={(e) => setDeleteEmailConfirm(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  placeholder="tu-correo@ejemplo.com"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[#3E3E3E] mb-2">
+                  Escribe &ldquo;quiero eliminar mi cuenta&rdquo;
+                </label>
+                <input
+                  type="text"
+                  value={deleteTextConfirm}
+                  onChange={(e) => setDeleteTextConfirm(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  placeholder="quiero eliminar mi cuenta"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={handleDeleteAccount}
+                disabled={!deleteEmailConfirm || !deleteTextConfirm}
+                className="flex-1 bg-red-600 text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Eliminar
+              </button>
+              <button
+                onClick={() => {
+                  setShowDeleteAccountModal(false);
+                  setDeleteEmailConfirm("");
+                  setDeleteTextConfirm("");
+                }}
+                className="flex-1 bg-gray-200 text-[#2E2E2E] py-3 rounded-xl font-semibold hover:bg-gray-300 transition-colors"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

@@ -21,12 +21,7 @@ export default function NotFound() {
           >
             Volver al inicio
           </Link>
-          <Link
-            href="/login"
-            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-xl border border-[#E5E5E5] bg-white text-[#2E2E2E] font-medium hover:border-[#2E2E2E]/30 transition-colors"
-          >
-            Iniciar sesión
-          </Link>
+         
         </div>
       </div>
     </div>

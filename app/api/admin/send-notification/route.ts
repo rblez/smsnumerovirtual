@@ -1,39 +1,22 @@
 import { NextResponse } from "next/server";
-import { getSupabaseAdmin } from "@/lib/supabase";
 import { Resend } from "resend";
+import { verifyAdminAccess } from "@/lib/admin-check";
 
 // Initialize Resend with API key
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
-    const { userId, email, type, amount } = await request.json();
-
-    // Verify admin authorization
-    const supabase = getSupabaseAdmin();
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-    if (sessionError || !session) {
+    // Verify admin access using centralized function
+    const auth = await verifyAdminAccess(request);
+    if (!auth.success) {
       return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
+        { error: auth.error },
+        { status: auth.status || 403 }
       );
     }
 
-    // Check if user is admin - TODO: Add is_admin column to profiles table
-    // For now, allowing all authenticated users to access admin functions
-    // const { data: profile, error: profileError } = await supabase
-    //   .from("profiles")
-    //   .select("is_admin")
-    //   .eq("id", session.user.id)
-    //   .single();
-
-    // if (profileError || !profile?.is_admin) {
-    //   return NextResponse.json(
-    //     { error: "Forbidden - Admin access required" },
-    //     { status: 403 }
-    //   );
-    // }
+    const { userId, email, type, amount } = await request.json();
 
     // Validate request
     if (!email || !type) {

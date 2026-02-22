@@ -157,17 +157,17 @@ export default function FAQPage() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-100 pt-8 pb-6 px-4 sm:px-6 lg:px-8">
+      <footer className="pt-8 pb-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-500 text-sm text-center md:text-left">
               © 2026 SMS Número Virtual. Todos los derechos reservados.
             </p>
             <div className="flex items-center gap-6">
-              <Link href="/terms" className="text-gray-500 hover:text-gray-900 transition-colors text-sm">
+              <Link href="/terms-of-service" className="text-gray-500 hover:text-gray-900 transition-colors text-sm">
                 Términos de Servicio
               </Link>
-              <Link href="/privacy" className="text-gray-500 hover:text-gray-900 transition-colors text-sm">
+              <Link href="/privacy-policy" className="text-gray-500 hover:text-gray-900 transition-colors text-sm">
                 Políticas de Privacidad
               </Link>
               <span className="text-gray-300">|</span>

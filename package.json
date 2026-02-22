@@ -13,6 +13,7 @@
     "@bradleyhodges/sfsymbols": "^7.0.4",
     "@bradleyhodges/sfsymbols-react": "^7.0.4",
     "@bradleyhodges/sfsymbols-types": "^7.0.4",
+    "@fontsource/jetbrains-mono": "^5.2.8",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.97.0",
     "cobe": "^0.6.5",
@@ -31,6 +32,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "shadcn": "^3.8.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

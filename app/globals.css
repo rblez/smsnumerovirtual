@@ -1,80 +1,42 @@
 @import "tailwindcss";
-@import "flag-icons/css/flag-icons.min.css";
+@import 'flag-icons/css/flag-icons.min.css';
 
-/* CursorGothic - Sans Serif */
 @font-face {
-  font-family: "CursorGothic";
-  src: url("/CursorGothic_Regular-s.p.a361088d.woff2") format("woff2");
+  font-family: "Product Sans";
+  src: url("../public/fonts/ProductSans-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "CursorGothic";
-  src: url("/CursorGothic_Bold-s.p.95169710.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "CursorGothic";
-  src: url("/CursorGothic_Italic-s.p.00bb2606.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "CursorGothic";
-  src: url("/CursorGothic_BoldItalic-s.p.036859cb.woff2") format("woff2");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* BerkeleyMono - Monospace */
-@font-face {
-  font-family: "BerkeleyMono";
-  src: url("/BerkeleyMono_Regular.p.e4888174.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "BerkeleyMono";
-  src: url("/BerkeleyMono_Oblique.p.f08c3069.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-/* SF Pro Rounded */
-@font-face {
-  font-family: "SF Pro Text";
-  src: url("/SF-Pro-Rounded-Semibold.otf") format("opentype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@theme {
-  --font-sans: "SF Pro Text", "CursorGothic", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: "SF Mono", "BerkeleyMono", "JetBrains Mono", monospace;
-  --font-display: "SF Pro Text", "CursorGothic", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 :root {
+  /* Font families - defined by next/font in layout.tsx */
+  --font-sans: "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Product Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", monospace;
+
   /* Colors from palette */
   --color-background: #FFFFFF;
+  --color-foreground: #2E2E2E;
+  --color-primary: #2E2E2E;
+  --color-secondary: #737373;
+  --color-muted: #FAFAFA;
+  --color-accent: #E5E5E5;
+  --color-border: #E5E5E5;
+}
+
+html {
+  font-size: 85%;
+}
+/* Global font application */
+body {
+  font-family: var(--font-sans);
+
 
   /* Brand (logo) palette - Monochromatic with blue accents */
-  --color-primary: #000000;
-  --color-primary-2: #1A1A1A;
-  --color-primary-3: #333333;
-  --color-muted: #666666;
+--color-primary: #000000;
+--color-primary-2: #1A1A1A;
+--color-primary-3: #333333;
+--color-muted: #666666;
 
   /* Secondary - Blues from image */
   --color-secondary: #D6EAF4;

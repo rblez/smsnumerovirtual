@@ -1,41 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { verifyAdminAccess } from "@/lib/admin-check";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export async function GET(request: NextRequest) {
   try {
-    // Get user session from Authorization header
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
+    // Verify admin access using centralized function
+    const auth = await verifyAdminAccess(request);
+    if (!auth.success) {
       return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
+        { error: auth.error },
+        { status: auth.status || 403 }
       );
     }
 
-    const token = authHeader.split(" ")[1];
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
-    
-    // Verify user
-    const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
-    
-    if (userError || !user) {
-      return NextResponse.json(
-        { error: "Invalid token" },
-        { status: 401 }
-      );
-    }
-
-    // Check if user is admin
-    const adminEmails = ['rblez@proton.me'];
-    if (!user.email || !adminEmails.includes(user.email)) {
-      return NextResponse.json(
-        { error: "Forbidden - Admin access required" },
-        { status: 403 }
-      );
-    }
 
     // Get email filter from query params
     const { searchParams } = new URL(request.url);
@@ -48,7 +29,7 @@ export async function GET(request: NextRequest) {
       console.warn("Could not fetch auth users:", authError);
     }
 
-    // If email filter provided, find matching user
+    // If email filter provided, find matching user (case-insensitive)
     let targetUserId: string | null = null;
     if (emailFilter && authUsers) {
       const matchedUser = authUsers.find(au => au.email?.toLowerCase() === emailFilter.toLowerCase());

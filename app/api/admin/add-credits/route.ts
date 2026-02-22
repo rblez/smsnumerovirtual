@@ -1,48 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { verifyAdminAccess } from "@/lib/admin-check";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export async function POST(request: NextRequest) {
   try {
-    // Get user session from Authorization header
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
+    // Verify admin access using centralized function
+    const auth = await verifyAdminAccess(request);
+    if (!auth.success) {
       return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
+        { error: auth.error },
+        { status: auth.status || 403 }
       );
     }
 
-    const token = authHeader.split(" ")[1];
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
-    
-    // Verify user
-    const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
-    
-    if (userError || !user) {
-      return NextResponse.json(
-        { error: "Invalid token" },
-        { status: 401 }
-      );
-    }
-
-    // Check if user is admin
-    const adminEmails = ['rblez@proton.me'];
-    if (!user.email || !adminEmails.includes(user.email)) {
-      return NextResponse.json(
-        { error: "Forbidden - Admin access required" },
-        { status: 403 }
-      );
-    }
 
     // Parse request body
     const { userId, email, amount, packageName } = await request.json();
 
     let targetUserId = userId;
 
-    // If email is provided instead of userId, find the user by email
+    // If email is provided instead of userId, find the user by email (case-insensitive)
     if (!targetUserId && email) {
       const { data: { users: authUsers }, error: listError } = await supabaseAdmin.auth.admin.listUsers();
       
@@ -53,7 +34,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      const targetUser = authUsers?.find(u => u.email === email);
+      const targetUser = authUsers?.find(u => u.email?.toLowerCase() === email.toLowerCase());
       if (!targetUser) {
         return NextResponse.json(
           { error: "User not found with that email" },
@@ -120,7 +101,7 @@ export async function POST(request: NextRequest) {
         package_name: packageName || (creditAmount > 0 ? "Manual Admin Add" : "Manual Admin Subtract"),
         payment_method: "admin_manual",
         status: "completed",
-        admin_notes: `${creditAmount > 0 ? 'Added' : 'Subtracted'} by admin: ${user.email}`,
+        admin_notes: `${creditAmount > 0 ? 'Added' : 'Subtracted'} by admin: ${auth.user?.email || 'unknown'}`,
       });
 
     if (purchaseError) {

@@ -103,6 +103,11 @@ export default function PrivacyPage() {
         <div className="mt-12 pt-8 border-t border-[#E5E5E5] text-sm text-[#737373]">
           <p>Última actualización: Febrero 2026</p>
         </div>
+        <div className="mt-16 pt-8 border-t border-[#E5E5E5] text-center">
+          <p className="text-[10px] tracking-wide text-[#A0A0A0]">
+            © 2026 SMS Número Virtual. Todos los derechos reservados.
+          </p>
+        </div>
       </div>
     </div>
   );

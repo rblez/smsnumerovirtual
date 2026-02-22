@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "@fontsource/jetbrains-mono";
+
 
 export const metadata: Metadata = {
   title: "SMS Número Virtual - Envía SMS a todo el mundo",
@@ -22,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className="antialiased">
+      <body className={`antialiased`}>
         {children}
       </body>
     </html>

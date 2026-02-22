@@ -232,6 +232,15 @@ function ResetPasswordContent() {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="pt-8 pb-6 px-4 sm:px-6 lg:px-8">
+        <div className="mt-16 pt-8 border-t border-[#E5E5E5] text-center">
+          <p className="text-[10px] tracking-wide text-[#A0A0A0]">
+            © 2026 SMS Número Virtual. Todos los derechos reservados.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -209,7 +209,7 @@ export default function Home() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.5 }} className="mt-12 flex flex-col items-center gap-3">
-              <div className="flex items-center gap-1 text-xs font-mono tracking-wider text-[#A0A0A0] uppercase">
+              <div className="flex items-center gap-1 text-xs font-mono tracking-wider uppercase">
                 <span className="flex -space-x-2">
                   {[1,2,3,4].map((i) => (
                     <div key={i} className="w-7 h-7 rounded-full bg-linear-to-br from-gray-200 to-gray-300 border-2 border-white flex items-center justify-center text-[10px] font-mono text-gray-600">
@@ -219,7 +219,7 @@ export default function Home() {
                 </span>
                 <span className="ml-3">+500 usuarios activos</span>
               </div>
-              <p className="text-[10px] font-mono tracking-wider text-[#A0A0A0]/60 uppercase">
+              <p className="text-[10px] font-mono tracking-wider uppercase">
                 Cuba • USA • España • México • +190 países
               </p>
             </motion.div>
@@ -326,13 +326,13 @@ export default function Home() {
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#2E2E2E] text-white font-mono text-[10px] tracking-wider uppercase rounded-full">Popular</div>
                   <div className="font-display text-4xl md:text-5xl font-normal text-[#2E2E2E] tracking-[-0.02em] mb-2">500</div>
                   <div className="font-mono text-xs tracking-wider text-[#737373] uppercase mb-6">coins</div>
-                  <div className="font-display text-3xl font-normal text-[#2E2E2E] tracking-[-0.01em] mb-6">$20 USD</div>
-                  <a href="https://t.me/pedrobardaji?text=Hola, quiero comprar 500 coins ($20 USD)" target="_blank" rel="noopener noreferrer" className="block w-full py-3 bg-[#2E2E2E] text-white font-mono text-xs tracking-wider uppercase rounded-full hover:bg-[#3E3E3E] transition-colors">Comprar</a>
+                  <div className="font-display text-3xl font-normal text-[#2E2E2E] tracking-[-0.01em] mb-6">$25 USD</div>
+                  <a href="https://t.me/pedrobardaji?text=Hola, quiero comprar 500 coins ($25 USD)" target="_blank" rel="noopener noreferrer" className="block w-full py-3 bg-[#2E2E2E] text-white font-mono text-xs tracking-wider uppercase rounded-full hover:bg-[#3E3E3E] transition-colors">Comprar</a>
                 </div>
                 <div className="bg-white border border-(--color-secondary) rounded-2xl p-8 text-center hover:border-(--color-primary) transition-all duration-300 hover:shadow-lg">
                   <div className="font-display text-4xl md:text-5xl font-normal text-[#2E2E2E] tracking-[-0.02em] mb-2">1,000</div>
                   <div className="font-mono text-xs tracking-wider text-[#737373] uppercase mb-6">coins</div>
-                  <div className="font-display text-3xl font-normal text-[#2E2E2E] tracking-[-0.01em] mb-6">$35 USD</div>
+                  <div className="font-display text-3xl font-normal text-[#2E2E2E] tracking-[-0.01em] mb-6">$50 USD</div>
                   <a href="https://t.me/pedrobardaji?text=Hola, quiero comprar 1,000 coins ($35 USD)" target="_blank" rel="noopener noreferrer" className="block w-full py-3 bg-[#2E2E2E] text-white font-mono text-xs tracking-wider uppercase rounded-full hover:bg-[#3E3E3E] transition-colors">Comprar</a>
                 </div>
               </div>
@@ -438,13 +438,13 @@ export default function Home() {
                 <div className="space-y-4">
                   <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wider" style={{ fontFamily: 'BerkeleyMono, monospace' }}>Legal</h4>
                   <ul className="space-y-3">
-                    <li><Link href="/terms" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">Términos de Servicio</Link></li>
-                    <li><Link href="/privacy" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">Políticas de Privacidad</Link></li>
+                    <li><Link href="/terms-of-service" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">Términos de Servicio</Link></li>
+                    <li><Link href="/privacy-policy" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">Políticas de Privacidad</Link></li>
                   </ul>
                 </div>
               </div>
             </div>
-            <div className="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-gray-500 text-sm">© 2026 SMS Número Virtual. Todos los derechos reservados.</p>
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-4">
@@ -457,16 +457,7 @@ export default function Home() {
                 <span className="text-gray-300">|</span>
                 {/* Language Selector */}
                 <div className="relative">
-                  <select className="appearance-none bg-transparent text-gray-500 hover:text-gray-900 text-sm cursor-pointer focus:outline-none focus:text-gray-900 transition-colors pr-6">
-                    <option value="es">Español</option>
-                    <option value="en">Inglés</option>
-                    <option value="pt">Portugués</option>
-                  </select>
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
+                  <p className="text-gray-500 text-sm">Español</p>
                 </div>
               </div>
             </div>

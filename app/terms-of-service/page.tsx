@@ -90,7 +90,7 @@ export default function TermsPage() {
             <h2 className="font-display text-xl text-[#2E2E2E] tracking-[-0.01em] mb-4">7. Contacto</h2>
             <p className="font-sans text-base text-[#737373] leading-relaxed tracking-[-0.01em]">
               Para cualquier consulta sobre estos términos, contáctanos por Telegram:{' '}
-              <a href="https://t.me/pedrobardaji" target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-wider uppercase text-[#2E2E2E] underline">
+              <a href="https://t.me/pedrobardaji" target="_blank" rel="noopener noreferrer" className="tracking-wider text-[#2E2E2E] underline">
                 @pedrobardaji
               </a>
             </p>
@@ -98,8 +98,8 @@ export default function TermsPage() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-[#E5E5E5] text-center">
-          <p className="font-mono text-[10px] tracking-wider uppercase text-[#A0A0A0]">
-            © 2025 SMS Número Virtual. Todos los derechos reservados.
+          <p className="text-[10px] tracking-wide text-[#A0A0A0]">
+            © 2026 SMS Número Virtual. Todos los derechos reservados.
           </p>
         </div>
       </div>

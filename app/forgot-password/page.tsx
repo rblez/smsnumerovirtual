@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
+import { SFIcon } from '@bradleyhodges/sfsymbols-react'
+import { sfChevronLeft } from '@bradleyhodges/sfsymbols'
 import Image from "next/image";
 
 export default function ForgotPasswordPage() {
@@ -194,14 +196,23 @@ export default function ForgotPasswordPage() {
           <div className="mt-6 text-center">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-sm text-[#737373] hover:text-[#2E2E2E] transition-colors"
+              className="inline-flex items-center gap-2 text-[#3E3E3E] hover:text-[#2E2E2E] font-medium transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <SFIcon icon={sfChevronLeft} size={16} color="currentColor" />
               Volver al inicio
             </Link>
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="pt-8 pb-6 px-4 sm:px-6 lg:px-8">
+        <div className="mt-16 pt-8 border-t border-[#E5E5E5] text-center">
+          <p className="text-[10px] tracking-wide text-[#A0A0A0]">
+            © 2026 SMS Número Virtual. Todos los derechos reservados.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

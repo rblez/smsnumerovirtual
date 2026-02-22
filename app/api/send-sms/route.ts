@@ -42,26 +42,57 @@ interface InnoveritResponse {
   balance?: number;
 }
 
-// Calculate coins cost based on country
-function getCoinsCost(phoneNumber: string): number {
+// Calculate coins cost based on country from database
+async function getCoinsCost(supabaseAdmin: ReturnType<typeof createClient>, phoneNumber: string): Promise<number> {
   const clean = phoneNumber.replace(/[^\d+]/g, "");
   
-  // Cuba and USA/Canada: 1 coin
-  if (clean.startsWith("+53")) return 1;
-  if (clean.startsWith("+1")) return 1;
+  // Extract dial code (first 2-4 digits after +)
+  let dialCode = "";
+  if (clean.startsWith("+")) {
+    // Find the dial code by checking against known prefixes
+    const prefixes = ["+1", "+53", "+52", "+34", "+44", "+49", "+33", "+39", "+55", "+54", "+57"];
+    for (const prefix of prefixes) {
+      if (clean.startsWith(prefix)) {
+        dialCode = prefix;
+        break;
+      }
+    }
+  }
   
-  // Tier 2: 2 coins
-  if (clean.startsWith("+52")) return 2; // Mexico
-  if (clean.startsWith("+34")) return 2; // Spain
-  if (clean.startsWith("+44")) return 2; // UK
-  if (clean.startsWith("+49")) return 2; // Germany
-  if (clean.startsWith("+33")) return 2; // France
-  if (clean.startsWith("+39")) return 2; // Italy
-  if (clean.startsWith("+55")) return 2; // Brazil
-  if (clean.startsWith("+54")) return 2; // Argentina
-  if (clean.startsWith("+57")) return 2; // Colombia
+  if (!dialCode) return 3; // Default fallback
   
-  // Default: 3 coins
+  try {
+    // Get the sale_price from sms_rates table
+    const { data, error } = await supabaseAdmin
+      .from("sms_rates")
+      .select("sale_price")
+      .eq("dial_code", dialCode)
+      .order("sale_price", { ascending: true }) // Get the lowest price for this dial code
+      .limit(1)
+      .single();
+    
+    if (error || !data) {
+      console.log(`No rate found for dial code ${dialCode}, using fallback`);
+      return getFallbackCost(dialCode);
+    }
+    
+    // Convert sale_price (in dollars) to coins
+    // Assuming 1 coin = $0.09 (based on Cuba's current pricing)
+    const COIN_TO_DOLLAR_RATIO = 0.09;
+    const priceInDollars = parseFloat(data.sale_price);
+    const coinsCost = priceInDollars / COIN_TO_DOLLAR_RATIO;
+    return Math.round(coinsCost); // Round to nearest whole coin
+    
+  } catch (error) {
+    console.error("Error fetching rate from database:", error);
+    return getFallbackCost(dialCode);
+  }
+}
+
+// Fallback pricing for when database is unavailable
+function getFallbackCost(dialCode: string): number {
+  if (dialCode === "+53" || dialCode === "+1") return 1;
+  if (["+52", "+34", "+44", "+49", "+33", "+39", "+55", "+54", "+57"].includes(dialCode)) return 2;
   return 3;
 }
 
@@ -143,7 +174,7 @@ export async function POST(request: NextRequest) {
     const smsParts = Math.ceil(message.length / 160) || 1;
     
     // Calculate coins cost
-    const coinsPerSMS = getCoinsCost(phoneNumber);
+    const coinsPerSMS = await getCoinsCost(supabaseAdmin, phoneNumber);
     const totalCoinsCost = coinsPerSMS * smsParts;
 
     // Validate message length
